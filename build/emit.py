@@ -652,7 +652,18 @@ NAV_TABS = [
 ]
 
 
+# Declared nav-order exceptions: sort these pages as if they had a different
+# filename. Keep this list tiny and obvious — it is the only place where the
+# generated navigation deviates from natural filename order.
+NAV_SORT_OVERRIDES = {
+    # "Australian native foods" (5b) is not part of the "Common names of
+    # plants" series (5a, 6, 6a); list it before the series.
+    "foodgardens/Foodgardens5b.html": "foodgardens/Foodgardens4z.html",
+}
+
+
 def natural_key(s: str):
+    s = NAV_SORT_OVERRIDES.get(s, s)
     return [int(t) if t.isdigit() else t.lower()
             for t in re.split(r"(\d+)", s)]
 
