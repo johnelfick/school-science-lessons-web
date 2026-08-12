@@ -115,6 +115,25 @@ def sanitize_soup(soup: BeautifulSoup) -> list[str]:
         if el.name not in KNOWN_TAGS:
             actions.append(f"unwrapped unknown tag <{el.name}>")
             el.unwrap()
+    # Misplaced quotes make attribute values swallow markup, e.g.
+    # <a name=">UNBiol1aH</a>. Reduce such values to their plausible token.
+    for a in soup.find_all("a"):
+        name = a.get("name")
+        if name and (len(name) > 60 or re.search(r'[<>\s"]', name)):
+            actions.append(f"repaired malformed anchor name ({name[:40]!r})")
+            m = re.search(r"[A-Za-z0-9][\w.\-]*", name)
+            if m:
+                a["name"] = m.group(0)
+            else:
+                del a["name"]
+        href = a.get("href")
+        if href and re.search(r"[<>\n]", href):
+            actions.append(f"repaired malformed link address ({href[:40]!r})")
+            clean = re.split(r"[<>\n]", href)[0].rstrip('"').strip()
+            if clean:
+                a["href"] = clean
+            else:
+                del a["href"]
     # <font> is styling we discard anyway, and unclosed <font> tags swallow
     # block content (tables) into inline context — remove the wrappers.
     for el in soup.find_all("font"):
