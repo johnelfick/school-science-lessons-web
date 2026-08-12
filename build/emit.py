@@ -335,7 +335,8 @@ class Emitter:
                 visible = re.sub(
                     r"^((?:\(\w{1,2}\)|\d+(?:\.\d+)+\.?|\d+[a-z]?[.)]))(\s)",
                     r'<b class="ssl-num">\1</b>\2', visible)
-                original_plain = re.sub(r"<[^>]+>", "", text).strip()
+                original_plain = html.unescape(
+                    re.sub(r"<[^>]+>", "", text)).strip()
                 visible, chem_changed = chem_format(visible)
                 if chem_changed:
                     visible += (
