@@ -33,6 +33,20 @@
 .md-typeset h2 { margin-top: 1.8em; }
 .md-typeset h3 { margin-top: 1.2em; }
 
+/* ---- Left sidebar: current section header --------------------------- */
+
+@media screen and (min-width: 76.25em) {
+  .md-nav--lifted > .md-nav__list > .md-nav__item--active > .md-nav__link {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 0.85rem;
+    color: var(--md-primary-fg-color);
+  }
+  [data-md-color-scheme="slate"] .md-nav--lifted > .md-nav__list
+    > .md-nav__item--active > .md-nav__link {
+    color: #7fc4ae;
+  }
+}
+
 /* ---- Figures (John's diagrams, inlined) ----------------------------- */
 
 .ssl-figure {
