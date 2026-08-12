@@ -75,7 +75,10 @@ whenever a new quirk is handled.
 - Local preview: `python -m http.server 8123 --bind 127.0.0.1 --directory site`
 - GitHub repo creation under the johnelfick account + Pages setup +
   first push: pending (needs John's login; steps in README).
-- GoatCounter analytics: agreed, awaiting site code from Patrick; wire
-  the script into mkdocs.yml extra + add a stats link when it arrives.
+- GoatCounter analytics: live (code "johnelfick", script injected via
+  overrides/main.html extrahead block; public dashboard
+  https://johnelfick.goatcounter.com, linked under About > Visitor
+  statistics). Account currently under Patrick's email, to be moved to
+  John's later.
 - MkDocs 2.0 will break Material eventually; mkdocs-material is pinned
   in requirements.txt. Revisit before upgrading anything.

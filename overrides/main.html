@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <!-- GoatCounter analytics: privacy-friendly, no cookies, no consent
+       banner needed. Public dashboard: https://johnelfick.goatcounter.com -->
+  <script data-goatcounter="https://johnelfick.goatcounter.com/count"
+          async src="https://gc.zgo.at/count.js"></script>
+{% endblock %}

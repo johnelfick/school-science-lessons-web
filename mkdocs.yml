@@ -8,6 +8,7 @@ site_author: Dr John Elfick
 
 theme:
   name: material
+  custom_dir: overrides
   language: en
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -291,4 +292,5 @@ nav:
       - Websites: websites.md
       - Greek alphabet: GreekAlphabet.md
       - Corrections list: fixes.md
+      - Visitor statistics: https://johnelfick.goatcounter.com/
       - Image credits: credits.md
