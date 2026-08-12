@@ -205,13 +205,33 @@ def is_external(href: str) -> bool:
 # ---------------------------------------------------------------- parsing
 
 def split_blocks(body: Tag) -> list[list]:
-    """Split the direct children of <body> into blocks at <hr> tags."""
+    """Split the direct children of <body> into blocks.
+
+    Boundaries are <hr> tags, and — for newer files that dropped the <hr>
+    dividers — any line-starting <a name> anchor whose text is a section
+    number ("9.1.0"). Empty anchors and mid-line anchors never split.
+    """
     blocks: list[list] = [[]]
+    at_line_start = True
     for node in body.children:
         if isinstance(node, Tag) and node.name == "hr":
             blocks.append([])
+            at_line_start = True
+            continue
+        if (at_line_start and isinstance(node, Tag) and node.name == "a"
+                and node.get("name")
+                and SECTION_NUM_RE.match(node.get_text(strip=True) or "-")):
+            if any((isinstance(n, Tag))
+                   or (isinstance(n, NavigableString) and n.strip())
+                   for n in blocks[-1]):
+                blocks.append([])
+        blocks[-1].append(node)
+        if isinstance(node, Tag) and node.name == "br":
+            at_line_start = True
+        elif isinstance(node, NavigableString) and not node.strip():
+            pass  # whitespace keeps line-start state
         else:
-            blocks[-1].append(node)
+            at_line_start = False
     return [b for b in blocks if any(
         (isinstance(n, Tag)) or (isinstance(n, NavigableString) and n.strip())
         for n in b

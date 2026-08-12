@@ -431,6 +431,8 @@ class Emitter:
         kept = []
         h1_norm = self.plain(f"<p>{h1}</p>").lower()
         for c in chunks:
+            # John sometimes pastes his link-checker notes into the page top
+            c = re.sub(r"https?://\S+\s+not\s+found\s*", "", c)
             text = self.plain(c)
             low = text.lower()
             if not text:
