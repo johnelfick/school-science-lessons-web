@@ -56,11 +56,20 @@ authoritative structure; section numbers and file position are not.**
   with same-page links, >50% of lines — inline cross-references in prose
   must NOT count) claim the linked sections as children, in listed
   order. Children are pulled from wherever they sit in the file (content
-  blocks are interleaved in source, e.g. UNBiology1 Stems). The page's
-  top contents list orders the top level. Claims that hit a misplaced
-  anchor fall back to matching by section number. Unclaimed sections
-  keep file order. Numbers never decide nesting (John files
-  `9.9.4.2 Celery stalk` under `9.9.9.0 Stems`).
+  blocks are interleaved in source, e.g. UNBiology1 Stems). Claims that
+  hit a misplaced anchor fall back to matching by section number.
+  Numbers never decide NESTING (John files `9.9.4.2 Celery stalk` under
+  `9.9.9.0 Stems`) — but they DO decide top-level ORDER: top-level
+  sections sort numerically (unnumbered ones follow in file order),
+  because page-top lists are often alphabetical shortcut indexes, not
+  reading order (Foodgardens1). Children keep their group's curated
+  list order.
+- **B5a. Page-top shortcut indexes.** A page-top list mixing many
+  cross-page links (≥8 cross-file link lines, e.g. Foodgardens1's A–Z
+  of crops and projects) is John's shortcut INDEX, not a table of
+  contents. It is kept, rendered as a collapsed "Quick links — A–Z
+  index" panel (`details.ssl-quicklinks`). Pure same-page contents
+  lists are still dropped — the ToC replaces them.
 - **B6. Anchor-less continuation blocks** attach to the preceding
   section.
 - **B7. Header-block boilerplate** (breadcrumb, date line, prev/next

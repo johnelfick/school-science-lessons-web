@@ -139,6 +139,44 @@
   font-weight: 700;
 }
 
+/* Page-top shortcut index, collapsed by default ------------------------ */
+
+.md-typeset details.ssl-quicklinks {
+  border: 1px solid var(--ssl-card-border);
+  border-radius: 10px;
+  background: var(--ssl-paper);
+  padding: 0.4rem 0.9rem;
+  margin: 0.8rem 0 1.2rem;
+}
+.md-typeset details.ssl-quicklinks summary {
+  cursor: pointer;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--md-primary-fg-color);
+}
+[data-md-color-scheme="slate"] .md-typeset details.ssl-quicklinks summary {
+  color: #7fc4ae;
+}
+.md-typeset details.ssl-quicklinks[open] {
+  padding-bottom: 0.7rem;
+}
+.md-typeset details.ssl-quicklinks p {
+  margin: 0.15rem 0;
+  font-size: 0.72rem;
+}
+@media screen and (min-width: 60em) {
+  .md-typeset details.ssl-quicklinks[open] > p:first-of-type,
+  .md-typeset details.ssl-quicklinks[open] {
+    column-width: 15rem;
+    column-gap: 2rem;
+  }
+  .md-typeset details.ssl-quicklinks[open] summary {
+    column-span: all;
+    margin-bottom: 0.4rem;
+  }
+}
+
 /* Chemical-formula lines: "source" reveals John's original text -------- */
 
 .md-typeset .ssl-src {

@@ -419,6 +419,9 @@ class Emitter:
 
     # ---------------------------------------------------------- page emit
 
+    LINK_LINE_RE = re.compile(
+        r'^<p>[|\s]*(?:<span[^>]*>[^<]*</span>\s*)?[|\s]*<a href="([^"]*)"')
+
     @staticmethod
     def plain(chunk: str) -> str:
         return " ".join(re.sub(r"<[^>]+>", " ", chunk).split())
@@ -503,8 +506,25 @@ class Emitter:
         for i, nodes in enumerate(blocks):
             section = by_index.get(i)
             if section is titled or (i == 0 and section is None):
-                body = self.render_block(nodes, rel, skip_frag_link_lines=True)
-                out.extend(self.filter_title_block(body, h1))
+                body = self.render_block(nodes, rel, skip_frag_link_lines=False)
+                link_chunks, prose = [], []
+                for c in body:
+                    if self.LINK_LINE_RE.match(c):
+                        link_chunks.append(c)
+                    else:
+                        prose.append(c)
+                out.extend(self.filter_title_block(prose, h1))
+                # A page-top list that mixes many cross-page links is John's
+                # shortcut INDEX, not a table of contents: keep it, collapsed.
+                cross = sum(1 for c in link_chunks
+                            if not self.LINK_LINE_RE.match(c).group(1).startswith("#"))
+                if cross >= 8:
+                    self.note(rel, f"page-top list kept as quick links "
+                                   f"({len(link_chunks)} entries)")
+                    out.append(
+                        '<details class="ssl-quicklinks"><summary>Quick links '
+                        "— A–Z index</summary>"
+                        + "".join(link_chunks) + "</details>")
                 out.append("")
                 self.note_stray_anchors(nodes, emitted_ids, out)
                 continue
@@ -567,15 +587,23 @@ class Emitter:
                 parent[child.block_index] = s
                 kids.setdefault(s.block_index, []).append(child)
 
-        # top-level order: the page contents list first, then file order
-        top_frags = frag_targets([blocks[titled.block_index]]) if titled else []
-        top_listed = []
-        for frag in top_frags:
-            s = anchor_to_sec.get(frag)
-            if s is not None and s.block_index not in parent and s not in top_listed:
-                top_listed.append(s)
-        roots = top_listed + [s for s in sections
-                              if s.block_index not in parent and s not in top_listed]
+        # Top-level order: numbered sections numerically (the numbers are
+        # John's IDs; the page-top lists are often alphabetical shortcut
+        # indexes, not reading order). Unnumbered sections follow in file
+        # order. Children keep their group's curated list order.
+        def root_key(s):
+            if s.number:
+                parts = []
+                for part in s.number.split("."):
+                    m = re.match(r"\d+", part)
+                    if not m:
+                        return (1, [], s.block_index)
+                    parts.append(int(m.group()))
+                return (0, parts, s.block_index)
+            return (1, [], s.block_index)
+
+        roots = sorted((s for s in sections if s.block_index not in parent),
+                       key=root_key)
 
         if parent:
             self.note(rel, f"nested {len(parent)} sections under "

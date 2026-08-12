@@ -51,6 +51,64 @@ def file_groups(items: dict[str, list[str]], empty_text: str) -> list[str]:
     return out
 
 
+def find_displaced_sections(repo: Path, pages) -> dict[str, list[str]]:
+    """Sections whose text sits far from their group in the file.
+
+    Uses the same claim logic as emit.py's section tree: a contents-list
+    block claims the sections it links to. A claimed child is 'displaced'
+    when another top-level section lies between its group and its text
+    (e.g. Foodgardens1: 10.1-10.5 located after 12.0).
+    """
+    from bs4 import BeautifulSoup
+    out: dict[str, list[str]] = {}
+    for rel, page in pages.items():
+        if len(page.sections) < 3:
+            continue
+        text = T.read_html(repo / rel)
+        soup = BeautifulSoup(text, "lxml")
+        T.sanitize_soup(soup)
+        if soup.body is None:
+            continue
+        blocks = T.split_blocks(soup.body)
+        secs = [s for s in page.sections[1:]]
+        anchor_to = {}
+        for s in secs:
+            if s.anchor:
+                anchor_to.setdefault(s.anchor, s)
+            for a in s.extra_anchors:
+                anchor_to.setdefault(a, s)
+        num_to = {}
+        for s in secs:
+            if s.number:
+                num_to.setdefault(s.number + "H", s)
+        parent = {}
+        for s in secs:
+            if s.kind != "contents-list" or s.block_index >= len(blocks):
+                continue
+            for frag in T.leading_frag_info(blocks[s.block_index])[0]:
+                child = anchor_to.get(frag) or num_to.get(frag)
+                if child is None or child is s or child.block_index in parent:
+                    continue
+                parent[child.block_index] = s
+        roots = [s for s in secs if s.block_index not in parent]
+        for s in secs:
+            g = parent.get(s.block_index)
+            if g is None:
+                continue
+            lo, hi = sorted((g.block_index, s.block_index))
+            between = [r for r in roots if lo < r.block_index < hi and r is not g]
+            if between:
+                gname = f"{g.number or ''} {g.title}".strip()
+                sname = f"{s.number or ''} {s.title}".strip()
+                bname = f"{between[0].number or ''} {between[0].title}".strip()
+                out.setdefault(rel, []).append(
+                    f"The text of <b>{esc(sname)}</b> belongs under "
+                    f"<b>{esc(gname)}</b>, but in the file it sits beyond "
+                    f"<b>{esc(bname)}</b>. Moving it next to the other "
+                    f"sections of its group makes the page easier to follow.")
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", default=".source")
@@ -62,6 +120,7 @@ def main() -> int:
     issues, _stats = T.validate_links(pages, all_links, disk_files, lower_map, repo)
     dupes = T.find_duplicate_anchors(repo, pages, "lxml")
     unreachable = sorted(disk_html - set(pages))
+    displaced = find_displaced_sections(repo, pages)
 
     anchor_owners: dict[str, set[str]] = defaultdict(set)
     for p in pages.values():
@@ -189,6 +248,7 @@ def main() -> int:
     w(f"| Links to section names used in several files | {n_amb} |")
     w(f"| HTML problems (missing closing tags, etc.) | {n_html} |")
     w(f"| Files with duplicated section names | {len(dup_groups)} |")
+    w(f"| Sections sitting away from their group | {sum(len(v) for v in displaced.values())} |")
     w(f"| Files no longer linked from the website | {len(unreachable)} |")
     if n_other:
         w(f"| Other link problems | {n_other} |")
@@ -229,7 +289,16 @@ def main() -> int:
     w("")
     out.extend(file_groups(dup_groups, "None found."))
     w("")
-    w("## 7. Files no longer linked from the website")
+    w("## 7. Sections sitting away from their group")
+    w("")
+    w("<p>These sections belong to a numbered group (according to the "
+      "contents list of that group), but their text is located somewhere "
+      "else in the file, past other sections. The graphical website "
+      "re-orders them automatically; moving the text in the source file "
+      "puts both websites right.</p>")
+    out.extend(file_groups(displaced, "None found."))
+    w("")
+    w("## 8. Files no longer linked from the website")
     w("")
     w("<p>No page links to these files any more, so visitors cannot reach "
       "them. They are probably old copies. If they are not needed, they can "

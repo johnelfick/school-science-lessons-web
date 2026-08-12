@@ -43,10 +43,12 @@ fixes_page → mkdocs build → trim_search → check_links.
 3. **Anchors are sacred.** Section ids keep John's anchor names
    (`2.4.1H` style) so decades of inbound links keep working. Section
    *numbers* are display text — never renumber them.
-4. **Structure comes from John's contents lists, not from section
-   numbers and not from file position.** His numbering is unreliable and
-   his content blocks are interleaved; the link lists he authors at the
-   top of each group are the truth. See QUIRKS.md part B.
+4. **Structure: membership from John's contents lists, top-level order
+   from section numbers.** His group link-lists decide which sections
+   nest where (and child order); numbers decide top-level order only.
+   File position decides neither (content blocks are interleaved).
+   Page-top lists that mix many cross-page links are shortcut indexes,
+   kept as collapsed "Quick links" panels. See QUIRKS.md part B.
 5. **Best-guess repairs must be logged.** Anything the pipeline guesses
    goes to `report/emit-log.txt` (build artifact) and, in John-friendly
    words, to the public corrections page at /fixes/.
