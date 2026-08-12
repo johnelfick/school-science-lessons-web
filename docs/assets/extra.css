@@ -274,6 +274,19 @@
   color: var(--md-default-fg-color--light);
 }
 
+/* Visitor counter at the bottom of the home page */
+.md-typeset .ssl-counter {
+  text-align: center;
+  margin: 1.6rem 0 0.4rem;
+  font-size: 0.72rem;
+}
+.md-typeset .ssl-counter a { color: var(--md-default-fg-color--light) !important; }
+.md-typeset .ssl-counter img {
+  height: 1.6rem;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+
 /* Recently updated list on the home page */
 .md-typeset h2.ssl-updates-title {
   margin-top: 2rem;

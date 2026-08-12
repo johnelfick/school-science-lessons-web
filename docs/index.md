@@ -110,3 +110,12 @@ day. The most recently revised pages:</p>
     here, every page links back to its original version at the bottom.
     Historic imagery on this page is public domain — see
     [image credits](credits.md).
+
+<p class="ssl-counter">
+  <a href="https://johnelfick.goatcounter.com/" target="_blank" rel="noopener"
+     title="Open the visitor statistics dashboard">
+    <img src="https://johnelfick.goatcounter.com/counter/TOTAL.svg"
+         alt="Total visits" loading="lazy">
+    Visitor statistics
+  </a>
+</p>
