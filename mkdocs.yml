@@ -287,6 +287,6 @@ nav:
     - "Alkaloids, Ibogaine to Zizyphine": appendices/appendixH.md
   # --- END GENERATED NAV ---
   - About:
-      - Image credits: credits.md
       - Websites: websites.md
       - Greek alphabet: GreekAlphabet.md
+      - Image credits: credits.md
