@@ -487,6 +487,9 @@ class Emitter:
         safe_title = h1.replace('"', "'")
         out.append("---")
         out.append(f'title: "{safe_title}"')
+        if page.description:
+            desc = " ".join(page.description.split())[:300].replace('"', "'")
+            out.append(f'description: "{desc}"')
         out.append("---")
         out.append("")
         out.append(f"# {h1}{h1_id}")
