@@ -657,8 +657,8 @@ NAV_TABS = [
 # generated navigation deviates from natural filename order.
 NAV_SORT_OVERRIDES = {
     # "Australian native foods" (5b) is not part of the "Common names of
-    # plants" series (5a, 6, 6a); list it before the series.
-    "foodgardens/Foodgardens5b.html": "foodgardens/Foodgardens4z.html",
+    # plants" series (5a, 6, 6a); list it just before the series.
+    "foodgardens/Foodgardens5b.html": "foodgardens/Foodgardens5a0.html",
 }
 
 
