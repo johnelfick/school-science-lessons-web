@@ -5,7 +5,8 @@
 The **graphical website** for School Science Lessons: a modern MkDocs
 Material site generated automatically from Dr John Elfick's hand-written
 HTML site. John (in his 80s, editing near-daily for decades) keeps his
-workflow untouched; this repo converts his repo nightly.
+workflow untouched; this repo rebuilds shortly after his commits
+(hourly poll + optional instant trigger).
 
 - Source (John's, read-only): https://github.com/johnelfick/school-science-lessons
 - This site: https://johnelfick.github.io/school-science-lessons-web/
@@ -24,7 +25,7 @@ build/fixes_page.py     docs/fixes.md — plain-language corrections page
                         so John can gradually fix source errors
 build/trim_search.py    post-build: cap search-index text per section
 build/check_links.py    post-build: verify every link in site/
-.github/workflows/nightly.yml  hourly-poll rebuild (skip-if-unchanged),
+.github/workflows/build.yml  hourly-poll rebuild (skip-if-unchanged),
                         optional instant repository_dispatch trigger
                         (setup/source-repo-workflow.yml goes in John's
                         repo), Pages deploy, .last-built-sha stamp commit
@@ -37,7 +38,7 @@ fixes_page → mkdocs build → trim_search → check_links.
 
 1. **1:1 page mapping.** Every source HTML file becomes exactly one site
    page at the same relative path. Provenance footers, link healing, the
-   corrections page and nightly regeneration all assume it. Never merge
+   corrections page and automatic regeneration all assume it. Never merge
    or split pages.
 2. **John's repo is read-only.** All repairs happen in our pipeline;
    problems in his files are *reported* (corrections page) not edited.

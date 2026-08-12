@@ -18,5 +18,5 @@ and is free to download for educational purposes.
 **Graphical website:**
 [https://johnelfick.github.io/school-science-lessons-web/](https://johnelfick.github.io/school-science-lessons-web/)
 
-The graphical website (this site) is generated automatically every night
-from the HTML website.
+The graphical website (this site) is generated automatically from the
+HTML website, and refreshes shortly after any change there.

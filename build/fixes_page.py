@@ -1,9 +1,9 @@
-"""Generate the nightly "corrections" page for the site editor.
+"""Generate the "corrections" page for the site editor.
 
 Writes docs/fixes.md — a plain-language, nicely grouped list of every
 problem the pipeline found in the source HTML, with a concrete suggested
 fix wherever one is known. The page is rebuilt (overwritten) on every
-nightly run and published with the site, so the editor can simply open a
+build and published with the site, so the editor can simply open a
 link and work through the lists over time.
 
 Usage: python build/fixes_page.py --source .source --docs docs
@@ -281,8 +281,8 @@ def main() -> int:
     w("# Corrections list")
     w("")
     w(f'<p class="ssl-source">Generated automatically on <b>{date_line}</b>. '
-      f"This page is rebuilt every night from the latest version of the "
-      f"website files.</p>")
+      f"This page is rebuilt automatically whenever the website files "
+      f"change.</p>")
     w("")
     w("<p>This page lists small problems found automatically in the source "
       "files of <a href='https://johnelfick.github.io/school-science-lessons/' "

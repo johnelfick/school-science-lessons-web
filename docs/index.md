@@ -103,9 +103,10 @@ day. The most recently revised pages:</p>
 <!-- END GENERATED UPDATES -->
 
 !!! info "About this website"
-    This website is generated automatically every night from
+    This website is generated automatically from
     <a href="https://johnelfick.github.io/school-science-lessons/" target="_blank" rel="noopener">the original School Science Lessons site</a>
-    written and continuously updated by Dr John Elfick. If anything looks wrong
+    written and continuously updated by Dr John Elfick, and refreshes shortly
+    after any change there. If anything looks wrong
     here, every page links back to its original version at the bottom.
     Historic imagery on this page is public domain — see
     [image credits](credits.md).

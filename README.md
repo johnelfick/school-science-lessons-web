@@ -3,7 +3,7 @@
 Modern web edition of [School Science Lessons](https://johnelfick.github.io/school-science-lessons/)
 by Dr John Elfick. This repository holds the build pipeline that converts the
 original hand-written HTML into a modern MkDocs Material site, rebuilt
-automatically every night from the
+automatically from the
 [source repository](https://github.com/johnelfick/school-science-lessons).
 
 The source repository is treated as read-only: the original site and its
@@ -47,12 +47,13 @@ python build/check_links.py                                # verify built links
 
 The corrections page (published at /fixes/) is a plain-language list of
 every problem found in the source files — broken links with suggested
-replacements, missing closing tags, unused files — regenerated nightly so
+replacements, missing closing tags, unused files — regenerated on every
+build so
 the editor can gradually fix the source at their own pace.
 
-## Nightly build (GitHub Actions)
+## Automatic build (GitHub Actions)
 
-[.github/workflows/nightly.yml](.github/workflows/nightly.yml) polls
+[.github/workflows/build.yml](.github/workflows/build.yml) polls
 hourly, and can also be triggered instantly on every source commit by
 installing [setup/source-repo-workflow.yml](setup/source-repo-workflow.yml)
 in the source repository (optional; see the comments in that file):
@@ -78,7 +79,7 @@ Needs to be done once, signed in to the `johnelfick` GitHub account
    `git remote add origin https://github.com/johnelfick/school-science-lessons-web.git`
    then `git push -u origin main`.
 4. Settings → Pages → **Build and deployment → Source: GitHub Actions**.
-5. Actions tab → "Nightly build and deploy" → **Run workflow** for the
+5. Actions tab → "Build and deploy" → **Run workflow** for the
    first build. The site appears at
    <https://johnelfick.github.io/school-science-lessons-web/>.
 
@@ -87,5 +88,5 @@ Needs to be done once, signed in to the `johnelfick` GitHub account
 - Phase 1 (parser + corpus validation): done
 - Phase 2 (design + MkDocs skeleton): done
 - Phase 3 (full site generation, search tuning, link check): done
-- Phase 4 (nightly GitHub Action + Pages): workflow ready — awaiting the
+- Phase 4 (automatic GitHub Action + Pages): workflow ready — awaiting the
   one-time GitHub setup above
