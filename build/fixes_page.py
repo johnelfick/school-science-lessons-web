@@ -91,21 +91,31 @@ def find_displaced_sections(repo: Path, pages) -> dict[str, list[str]]:
                     continue
                 parent[child.block_index] = s
         roots = [s for s in secs if s.block_index not in parent]
+        by_group: dict[int, tuple] = {}
         for s in secs:
             g = parent.get(s.block_index)
             if g is None:
                 continue
             lo, hi = sorted((g.block_index, s.block_index))
-            between = [r for r in roots if lo < r.block_index < hi and r is not g]
+            # Interposing contents-list roots are John's normal layout
+            # (all group lists at the top); only unrelated CONTENT between
+            # a group and its child means real displacement.
+            between = [r for r in roots
+                       if lo < r.block_index < hi and r is not g
+                       and r.kind == "content"]
             if between:
-                gname = f"{g.number or ''} {g.title}".strip()
-                sname = f"{s.number or ''} {s.title}".strip()
-                bname = f"{between[0].number or ''} {between[0].title}".strip()
-                out.setdefault(rel, []).append(
-                    f"The text of <b>{esc(sname)}</b> belongs under "
-                    f"<b>{esc(gname)}</b>, but in the file it sits beyond "
-                    f"<b>{esc(bname)}</b>. Moving it next to the other "
-                    f"sections of its group makes the page easier to follow.")
+                gname, kids, seps = by_group.setdefault(
+                    g.block_index,
+                    (f"{g.number or ''} {g.title}".strip(), [], set()))
+                kids.append(s.number or s.title)
+                seps.add(f"{between[0].number or ''} {between[0].title}".strip())
+        for gname, kids, seps in by_group.values():
+            shown = ", ".join(kids[:8]) + (" …" if len(kids) > 8 else "")
+            out.setdefault(rel, []).append(
+                f"The sections of <b>{esc(gname)}</b> ({esc(shown)}) have "
+                f"their text located beyond <b>{esc(sorted(seps)[0])}</b>. "
+                f"Moving them next to their group makes the page easier "
+                f"to follow.")
     return out
 
 
