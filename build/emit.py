@@ -247,11 +247,39 @@ class Emitter:
             if visible and not skip:
                 chunks.append(f"<p>{visible}</p>")
 
+        def emit_tab_table(rows: list[str]):
+            """Tab-separated text lines are tables the browser collapses to
+            plain text; render them as a real table (first row as header)."""
+            cells = [re.split(r"\t+", r) for r in rows]
+            head = "".join(f"<th>{c.strip()}</th>" for c in cells[0])
+            body = "".join(
+                "<tr>" + "".join(f"<td>{c.strip()}</td>" for c in row) + "</tr>"
+                for row in cells[1:])
+            chunks.append(
+                f'<div class="ssl-table-wrap"><table>'
+                f"<thead><tr>{head}</tr></thead><tbody>{body}</tbody>"
+                f"</table></div>")
+
         def flush():
-            for ln in "".join(parts).split(self.BR):
-                if ln.strip():
-                    emit_line(ln.strip())
+            lns = [ln.strip() for ln in "".join(parts).split(self.BR)
+                   if ln.strip()]
             parts.clear()
+            i = 0
+            while i < len(lns):
+                is_tabby = lns[i].count("\t") >= 2 and self.IMG not in lns[i]
+                if is_tabby:
+                    run = []
+                    while i < len(lns) and lns[i].count("\t") >= 2 \
+                            and self.IMG not in lns[i]:
+                        run.append(lns[i])
+                        i += 1
+                    if len(run) >= 2:
+                        emit_tab_table(run)
+                    else:
+                        emit_line(run[0])
+                    continue
+                emit_line(lns[i])
+                i += 1
 
         for node in nodes:
             if isinstance(node, Tag) and node.name in ("h1", "h2", "h3", "h4"):
