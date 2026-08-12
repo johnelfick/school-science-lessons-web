@@ -229,7 +229,6 @@ class Emitter:
         """
         chunks: list[str] = []
         parts: list[str] = []
-        state = {"in_experiments": False}
 
         def emit_line(text: str):
             srcs = re.findall(f"{self.IMG}([^{self.IMG}]*){self.IMG}", text)
@@ -251,7 +250,6 @@ class Emitter:
             plain_line = re.sub(r"<[^>]+>", "", visible).strip()
             if re.fullmatch(r"Experiments?:?", plain_line):
                 if not skip_frag_link_lines:
-                    state["in_experiments"] = True
                     chunks.append(f'<p class="ssl-minihead">{plain_line.rstrip(":")}</p>')
                 return
             m = re.match(
@@ -262,8 +260,11 @@ class Emitter:
                 skip = (skip_frag_link_lines is True
                         or unquote(m.group(1)) in skip_frag_link_lines)
             if visible and not skip:
-                if state["in_experiments"]:
-                    visible = re.sub(r"^(\d+\.)(\s)", r"<b>\1</b>\2", visible)
+                # Highlight leading enumeration markers: "1.", "2a.", "1.2",
+                # "(a)" — John's numbered items, otherwise hard to scan.
+                visible = re.sub(
+                    r"^((?:\(\w{1,2}\)|\d+(?:\.\d+)+\.?|\d+[a-z]?[.)]))(\s)",
+                    r'<b class="ssl-num">\1</b>\2', visible)
                 chunks.append(f"<p>{visible}</p>")
 
         def emit_tab_table(rows: list[str]):

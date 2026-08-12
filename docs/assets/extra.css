@@ -106,6 +106,12 @@
 /* Images anywhere in content shrink to fit rather than overflow */
 .md-typeset img { max-width: 100%; height: auto; }
 
+/* Leading enumeration markers ("1.", "2a.", "(a)") in body lines */
+.md-typeset b.ssl-num {
+  font-size: 1.12em;
+  font-weight: 700;
+}
+
 /* "Experiments" pseudo-headings inside sections */
 .md-typeset .ssl-minihead {
   font-family: "Fraunces", Georgia, serif;
