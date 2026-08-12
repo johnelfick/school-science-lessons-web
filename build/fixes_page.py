@@ -172,9 +172,8 @@ def main() -> int:
       "files of <a href='https://johnelfick.github.io/school-science-lessons/' "
       "target='_blank' rel='noopener'>School Science Lessons</a>. "
       "The modern website repairs most of them on the fly, but fixing them in "
-      "the source files makes both websites better. There is no hurry — the "
-      "lists simply shrink as items are fixed. Click a file name to see its "
-      "items.</p>")
+      "the source files makes both websites better. Click a file name to see "
+      "its items.</p>")
     w("")
     w("| Kind of problem | How many |")
     w("|---|---|")
