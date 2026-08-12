@@ -37,6 +37,7 @@ theme:
     - search.highlight
   icon:
     logo: material/flask-outline
+  favicon: assets/favicon.png
 
 extra_css:
   - assets/extra.css
