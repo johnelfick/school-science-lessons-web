@@ -119,10 +119,11 @@ def sanitize_soup(soup: BeautifulSoup) -> list[str]:
     # block content (tables) into inline context — remove the wrappers.
     for el in soup.find_all("font"):
         el.unwrap()
-    for a in soup.find_all("a", href=True):
+    for a in soup.find_all("a"):
         if a.find(["br", "hr", "a"]) is None:
             continue
-        actions.append(f"closed unterminated link ({a.get('href', '')[:60]})")
+        what = a.get("href") or a.get("name") or "<a> with no attributes"
+        actions.append(f"closed unterminated link ({str(what)[:60]})")
         moved, move = False, []
         for child in list(a.children):
             if not moved and isinstance(child, Tag) and (
@@ -133,6 +134,12 @@ def sanitize_soup(soup: BeautifulSoup) -> list[str]:
                 move.append(child)
         for node in reversed(move):
             a.insert_after(node)
+    # A bare <a> (no attributes) is a typo; it can swallow whole sections
+    # into the title line. Keep its text, drop the tag.
+    for a in soup.find_all("a"):
+        if not a.attrs:
+            actions.append("unwrapped empty <a> tag")
+            a.unwrap()
     # Tables written without <tr>/<td> tags (bare text lines, blank line
     # between rows): browsers hoist the text out of the table. Rebuild the
     # rows from the text layout.
