@@ -707,6 +707,46 @@ def write_nav(mkdocs_yml: Path, titles: dict[str, str]) -> None:
           f"{len(titles)} pages")
 
 
+UPDATES_BEGIN = "<!-- BEGIN GENERATED UPDATES (written by build/emit.py --all) -->"
+UPDATES_END = "<!-- END GENERATED UPDATES -->"
+
+
+def write_updates(index_md: Path, pages, titles: dict[str, str],
+                  limit: int = 40) -> None:
+    """Regenerate the home page's recently-updated list from page dates."""
+    if not index_md.is_file():
+        return
+    text = index_md.read_text(encoding="utf-8")
+    if UPDATES_BEGIN not in text or UPDATES_END not in text:
+        return
+    import datetime
+    entries = []
+    for rel, title in titles.items():
+        date_str = pages[rel].date or ""
+        m = re.match(r"(\d{4})-(\d{2})-(\d{2})", date_str)
+        if not m:
+            continue
+        try:
+            d = datetime.date(*map(int, m.groups()))
+        except ValueError:
+            continue
+        entries.append((d, title, posixpath.splitext(rel)[0] + "/"))
+    entries.sort(key=lambda e: (e[0], e[1]), reverse=True)
+    rows = [
+        f'<a class="ssl-update" href="{url}">'
+        f"<time>{d.day} {d.strftime('%b %Y')}</time>"
+        f"<span>{html.escape(title)}</span></a>"
+        for d, title, url in entries[:limit]
+    ]
+    block = '<div class="ssl-updates">\n' + "\n".join(rows) + "\n</div>"
+    begin = text.index(UPDATES_BEGIN)
+    end = text.index(UPDATES_END)
+    new = text[:begin] + UPDATES_BEGIN + "\n" + block + "\n" + text[end:]
+    index_md.write_text(new, encoding="utf-8")
+    print(f"Updates list written: {min(limit, len(entries))} entries "
+          f"(latest {entries[0][0].isoformat() if entries else 'n/a'})")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", default=".source")
@@ -747,6 +787,7 @@ def main() -> int:
           f"-> report/emit-log.txt")
     if args.all:
         write_nav(Path("mkdocs.yml"), titles)
+        write_updates(docs / "index.md", pages, titles)
     return 0
 
 

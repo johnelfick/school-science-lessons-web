@@ -209,6 +209,47 @@
   color: var(--md-default-fg-color--light);
 }
 
+/* Recently updated list on the home page */
+.md-typeset h2.ssl-updates-title {
+  margin-top: 2rem;
+  margin-bottom: 0.2rem;
+}
+.md-typeset .ssl-updates-note {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.75rem;
+  margin: 0 0 0.8rem;
+}
+.ssl-updates {
+  max-height: 17rem;
+  overflow-y: auto;
+  border: 1px solid var(--ssl-card-border);
+  border-radius: 12px;
+  background: var(--md-default-bg-color);
+  margin-bottom: 1.5rem;
+}
+.md-typeset a.ssl-update {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.45rem 1rem;
+  color: var(--md-default-fg-color) !important;
+  border-bottom: 1px solid var(--ssl-card-border);
+  font-size: 0.75rem;
+}
+.md-typeset a.ssl-update:last-child { border-bottom: 0; }
+.md-typeset a.ssl-update:hover {
+  background: var(--ssl-paper);
+  color: var(--md-primary-fg-color) !important;
+}
+.md-typeset a.ssl-update time {
+  flex: 0 0 6.2rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--md-primary-fg-color);
+  white-space: nowrap;
+}
+[data-md-color-scheme="slate"] .md-typeset a.ssl-update time { color: #7fc4ae; }
+
 .ssl-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
