@@ -112,6 +112,41 @@
   font-weight: 700;
 }
 
+/* Chemical-formula lines: "source" reveals John's original text -------- */
+
+.md-typeset .ssl-src {
+  position: relative;
+  font-size: 0.58rem;
+  color: var(--md-default-fg-color--lighter);
+  cursor: help;
+  margin-left: 0.35em;
+  border-bottom: 1px dotted var(--md-default-fg-color--lighter);
+  user-select: none;
+}
+.md-typeset .ssl-src:hover,
+.md-typeset .ssl-src:focus {
+  color: var(--md-accent-fg-color);
+}
+.md-typeset .ssl-src:hover::after,
+.md-typeset .ssl-src:focus::after {
+  content: attr(data-src);
+  position: absolute;
+  left: 0;
+  bottom: 1.6em;
+  z-index: 20;
+  width: max-content;
+  max-width: min(34rem, 80vw);
+  padding: 0.5em 0.8em;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  border: 1px solid var(--ssl-card-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  white-space: pre-wrap;
+}
+
 /* "Experiments" pseudo-headings inside sections */
 .md-typeset .ssl-minihead {
   font-family: "Fraunces", Georgia, serif;

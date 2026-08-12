@@ -30,6 +30,76 @@ ORIGINAL_BASE = "https://johnelfick.github.io/school-science-lessons/"
 INLINE_KEEP = {"b", "i", "u", "em", "strong", "sub", "sup", "small", "code"}
 BLOCK_PASSTHROUGH = {"table", "ul", "ol", "dl", "blockquote", "pre"}
 
+# ---------------------------------------------------------------- chemistry
+
+ELEMENTS = set("""
+H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu
+Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs
+Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl
+Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh
+Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og
+""".split())
+
+# single-element molecules worth formatting despite having one symbol
+SIMPLE_MOLECULES = {"O2", "O3", "H2", "N2", "F2", "Cl2", "Br2", "I2", "P4", "S8"}
+
+CHEM_CANDIDATE_RE = re.compile(
+    r"\b(\d{0,2})([A-Z][A-Za-z0-9()]*\d[A-Za-z0-9()]*?)(\d?[+-])?(?![\w(])")
+ARROW_RE = re.compile(r"\s*-{2,4}(?:&gt;|>)\s*")
+EQUILIBRIUM_RE = re.compile(r"\s*&lt;\s*=+\s*(?:&gt;|>)\s*|\s*<\s*=+\s*>\s*")
+
+
+def format_formula(match: re.Match) -> str:
+    """Format one candidate as a chemical formula, or return it unchanged."""
+    coeff, body, charge = match.group(1), match.group(2), match.group(3) or ""
+    tokens = re.findall(r"[A-Z][a-z]?|\d+|\(|\)", body)
+    if "".join(tokens) != body:
+        return match.group(0)
+    out, n_elements, depth, prev = [], 0, 0, None
+    for t in tokens:
+        if t == "(":
+            depth += 1
+            out.append(t)
+        elif t == ")":
+            depth -= 1
+            if depth < 0:
+                return match.group(0)
+            out.append(t)
+        elif t.isdigit():
+            if prev is None or prev == "(":
+                return match.group(0)   # digits only follow a symbol or ')'
+            out.append(f"<sub>{t}</sub>")
+        elif t in ELEMENTS:
+            n_elements += 1
+            out.append(t)
+        else:
+            return match.group(0)       # not an element symbol
+        prev = t
+    if depth != 0:
+        return match.group(0)
+    if n_elements < 2 and body not in SIMPLE_MOLECULES:
+        return match.group(0)
+    sup = f"<sup>{charge}</sup>" if charge else ""
+    return f"{coeff}{''.join(out)}{sup}"
+
+
+def chem_format(html_line: str) -> tuple[str, bool]:
+    """Apply formula subscripts/superscripts and reaction arrows to the text
+    segments of a rendered line (never inside tags)."""
+    segs = re.split(r"(<[^>]+>)", html_line)
+    changed = False
+    for idx, seg in enumerate(segs):
+        if seg.startswith("<"):
+            continue
+        new = ARROW_RE.sub(" → ", seg)
+        new = EQUILIBRIUM_RE.sub(" ⇌ ", new)
+        new = CHEM_CANDIDATE_RE.sub(format_formula, new)
+        if new != seg:
+            changed = True
+            segs[idx] = new
+    return "".join(segs), changed
+
+
 PREVIEW_PAGES = [
     "chemistry/UNChem1.html",
     "physics/UNPh06.html",
@@ -265,6 +335,13 @@ class Emitter:
                 visible = re.sub(
                     r"^((?:\(\w{1,2}\)|\d+(?:\.\d+)+\.?|\d+[a-z]?[.)]))(\s)",
                     r'<b class="ssl-num">\1</b>\2', visible)
+                original_plain = re.sub(r"<[^>]+>", "", text).strip()
+                visible, chem_changed = chem_format(visible)
+                if chem_changed:
+                    visible += (
+                        f' <small class="ssl-src" tabindex="0" '
+                        f'data-src="{html.escape(original_plain, quote=True)}"'
+                        f">source</small>")
                 chunks.append(f"<p>{visible}</p>")
 
         def emit_tab_table(rows: list[str]):
