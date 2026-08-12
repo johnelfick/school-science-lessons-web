@@ -229,6 +229,7 @@ class Emitter:
         """
         chunks: list[str] = []
         parts: list[str] = []
+        state = {"in_experiments": False}
 
         def emit_line(text: str):
             srcs = re.findall(f"{self.IMG}([^{self.IMG}]*){self.IMG}", text)
@@ -243,6 +244,16 @@ class Emitter:
                         f'<a href="{src}"><img src="{src}" alt="{html.escape(caption)}" loading="lazy"></a>'
                         f"<figcaption>{html.escape(caption)}</figcaption></figure>")
                 return
+            # "Experiments" pseudo-heading: John labels experiment lists with
+            # a bare Experiment(s) line. Style it as a mini heading in
+            # content; drop it in contents lists (the linked experiments
+            # become real headings there).
+            plain_line = re.sub(r"<[^>]+>", "", visible).strip()
+            if re.fullmatch(r"Experiments?:?", plain_line):
+                if not skip_frag_link_lines:
+                    state["in_experiments"] = True
+                    chunks.append(f'<p class="ssl-minihead">{plain_line.rstrip(":")}</p>')
+                return
             m = re.match(
                 r'^[|\s]*(?:<span id="[^"]*">[^<]*</span>\s*)?[|\s]*<a href="#([^"]*)"',
                 visible)
@@ -251,6 +262,8 @@ class Emitter:
                 skip = (skip_frag_link_lines is True
                         or unquote(m.group(1)) in skip_frag_link_lines)
             if visible and not skip:
+                if state["in_experiments"]:
+                    visible = re.sub(r"^(\d+\.)(\s)", r"<b>\1</b>\2", visible)
                 chunks.append(f"<p>{visible}</p>")
 
         def emit_tab_table(rows: list[str]):
