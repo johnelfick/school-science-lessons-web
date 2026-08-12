@@ -233,6 +233,38 @@ def block_anchors(nodes: list) -> list[str]:
     return names
 
 
+def first_line_anchor(nodes: list) -> str | None:
+    """Name of an anchor that STARTS the block's first line, else None.
+
+    Newer files scatter empty <a name> anchors mid-body; those must not
+    define sections (their neighbours' prose would become headings).
+    """
+    def tokens(ns):
+        for n in ns:
+            if isinstance(n, NavigableString):
+                yield ("text", str(n))
+            elif isinstance(n, Tag):
+                if n.name in ("br", "hr", "table"):
+                    yield ("stop", None)
+                elif n.name == "a" and n.get("name"):
+                    yield ("anchor", n["name"])
+                    yield from tokens(list(n.children))
+                else:
+                    yield from tokens(list(n.children))
+
+    seen = ""
+    for kind, val in tokens(nodes):
+        if kind == "stop":
+            return None
+        if kind == "anchor":
+            return val if not re.search(r"[A-Za-z0-9]", seen) else None
+        seen += val or ""
+    return None
+
+
+HEADING_LINE_RE = re.compile(r"^(\d+(?:\.\d+)+[a-z]?)\s+\S")
+
+
 def anchor_line_title(nodes: list, anchor_name: str) -> str | None:
     """Text of the anchor element plus what follows it up to the next <br>.
 
@@ -347,11 +379,26 @@ def parse_page(repo: Path, rel_path: str, parser: str) -> tuple[Page, list[tuple
                     page.date = ln
                     break
 
-        if not anchors:
+        # Which anchor (if any) defines this block as a section? Only one
+        # that starts the first line; otherwise a heading-looking first
+        # line gets a synthesized conventional anchor (number + "H").
+        if i == 0:
+            primary = anchors[0] if anchors else None
+        else:
+            primary = first_line_anchor(nodes)
+            if primary is None and lines and len(lines[0]) <= 90 \
+                    and HEADING_LINE_RE.match(lines[0]):
+                synth = HEADING_LINE_RE.match(lines[0]).group(1) + "H"
+                if synth not in page.anchors:
+                    page.anchors.add(synth)
+                    primary = synth
+                else:
+                    primary = ""   # heading without an explicit id
+        if primary is None:
             page.blocks_without_anchor += 1
             continue
 
-        first_line = anchor_line_title(nodes, anchors[0]) \
+        first_line = (anchor_line_title(nodes, primary) if primary else None) \
             or (lines[0] if lines else "")
         number = None
         m = re.match(r"^(\d+(?:\.\d+)*[a-z]?)\s+(.*)", first_line)
@@ -361,9 +408,9 @@ def parse_page(repo: Path, rel_path: str, parser: str) -> tuple[Page, list[tuple
 
         kind = "header" if i == 0 else classify_block(nodes, lines)
         page.sections.append(Section(
-            anchor=anchors[0], number=number, title=title.strip(),
+            anchor=primary, number=number, title=title.strip(),
             kind=kind, block_index=i, n_lines=len(lines),
-            extra_anchors=anchors[1:],
+            extra_anchors=[a for a in anchors if a != primary],
         ))
 
     return page, hrefs

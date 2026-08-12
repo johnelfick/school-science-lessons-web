@@ -416,7 +416,8 @@ class Emitter:
         # their intended order; section numbers are too unreliable to use.
         anchor_to_sec = {}
         for s in sections:
-            anchor_to_sec.setdefault(s.anchor, s)
+            if s.anchor:
+                anchor_to_sec.setdefault(s.anchor, s)
             for a in s.extra_anchors:
                 anchor_to_sec.setdefault(a, s)
 
@@ -436,13 +437,25 @@ class Emitter:
                 s = parent.get(s.block_index)
             return False
 
+        # Fallback claim resolution: John's contents links sometimes target a
+        # misplaced anchor inside the wrong block; match by section number.
+        num_to_sec = {}
+        for s in sections:
+            if s.number:
+                num_to_sec.setdefault(s.number + "H", s)
+
         for s in sections:
             if s.kind != "contents-list":
                 continue
             for frag in frag_targets(sec_blocks.get(s.block_index, [])):
-                child = anchor_to_sec.get(frag)
-                if child is None or child is s or child.block_index in parent \
-                        or is_ancestor(child, s):
+                child = None
+                for cand in (anchor_to_sec.get(frag), num_to_sec.get(frag)):
+                    if cand is not None and cand is not s \
+                            and cand.block_index not in parent \
+                            and not is_ancestor(cand, s):
+                        child = cand
+                        break
+                if child is None:
                     continue
                 parent[child.block_index] = s
                 kids.setdefault(s.block_index, []).append(child)
@@ -471,8 +484,10 @@ class Emitter:
             head = f"{section.number} {section.title}" if section.number \
                 else section.title
             head = head.strip() or section.anchor
-            out.append(f'{"#" * min(level, 4)} {head} {{#{section.anchor}}}')
-            emitted_ids.add(section.anchor)
+            id_part = f" {{#{section.anchor}}}" if section.anchor else ""
+            out.append(f'{"#" * min(level, 4)} {head}{id_part}')
+            if section.anchor:
+                emitted_ids.add(section.anchor)
             out.append("")
             own_kids = kids.get(section.block_index, [])
             if section.kind == "contents-list":
