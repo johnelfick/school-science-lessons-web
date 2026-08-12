@@ -489,8 +489,11 @@ class Emitter:
         out.append(f"# {h1}{h1_id}")
         out.append("")
         if page.date:
-            out.append(f'<p class="ssl-source">Last updated {page.date} '
-                       f"by Dr John Elfick</p>")
+            out.append(
+                f'<p class="ssl-source">'
+                f'<a href="{ORIGINAL_BASE}{rel}" target="_blank" rel="noopener" '
+                f'title="Open the original page">'
+                f"Last updated {page.date} by Dr John Elfick</a></p>")
             out.append("")
 
         # ---- gather sections and attach anchor-less continuation blocks
