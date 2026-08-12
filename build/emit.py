@@ -375,9 +375,9 @@ class Emitter:
         out.append("")
         out.append(
             f'<p class="ssl-source">This page was generated automatically from '
-            f'<a href="{ORIGINAL_BASE}{rel}">the original page</a> on '
-            f"John Elfick's School Science Lessons website. "
-            f"If something looks wrong, please check the original.</p>")
+            f'<a href="{ORIGINAL_BASE}{rel}" target="_blank" rel="noopener">'
+            f"the original page</a> on John Elfick's School Science Lessons "
+            f"website. If something looks wrong, please check the original.</p>")
 
         dest = self.docs / (posixpath.splitext(rel)[0] + ".md")
         dest.parent.mkdir(parents=True, exist_ok=True)

@@ -55,7 +55,7 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
 
 !!! info "About this website"
     This website is generated automatically every night from
-    [the original School Science Lessons site](https://johnelfick.github.io/school-science-lessons/)
+    <a href="https://johnelfick.github.io/school-science-lessons/" target="_blank" rel="noopener">the original School Science Lessons site</a>
     written and continuously updated by Dr John Elfick. If anything looks wrong
     here, every page links back to its original version at the bottom.
     Historic imagery on this page is public domain — see
