@@ -1,9 +1,11 @@
-name: Nightly build and deploy
+name: Build and deploy
 
 on:
   schedule:
-    - cron: "0 14 * * *"   # 14:00 UTC = midnight Brisbane (AEST, no DST)
+    - cron: "20 * * * *"    # hourly poll; skips in seconds when unchanged
   workflow_dispatch: {}     # manual runs from the Actions tab
+  repository_dispatch:      # instant trigger from the source repo (optional
+    types: [source-updated] # setup: see setup/source-repo-workflow.yml)
   push:
     branches: [main]        # rebuild when the pipeline itself changes
 
@@ -34,8 +36,8 @@ jobs:
           SRC_SHA=$(git -C .source rev-parse HEAD)
           LAST=$(cat .last-built-sha 2>/dev/null || echo none)
           echo "src=$SRC_SHA" >> "$GITHUB_OUTPUT"
-          if [ "$SRC_SHA" = "$LAST" ] && [ "${{ github.event_name }}" = "schedule" ]; then
-            echo "Source unchanged ($SRC_SHA); skipping nightly rebuild."
+          if [ "$SRC_SHA" = "$LAST" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ] && [ "${{ github.event_name }}" != "push" ]; then
+            echo "Source unchanged ($SRC_SHA); skipping rebuild."
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"

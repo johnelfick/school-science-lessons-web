@@ -52,12 +52,14 @@ the editor can gradually fix the source at their own pace.
 
 ## Nightly build (GitHub Actions)
 
-[.github/workflows/nightly.yml](.github/workflows/nightly.yml) runs every
-night at midnight Brisbane time (14:00 UTC):
+[.github/workflows/nightly.yml](.github/workflows/nightly.yml) polls
+hourly, and can also be triggered instantly on every source commit by
+installing [setup/source-repo-workflow.yml](setup/source-repo-workflow.yml)
+in the source repository (optional; see the comments in that file):
 
 1. Clones the source repository (shallow).
-2. Skips the build if the source HEAD matches `.last-built-sha` (scheduled
-   runs only — manual and push-triggered runs always build).
+2. Skips the build if the source HEAD matches `.last-built-sha`
+   (manual and pipeline-push runs always build).
 3. Runs the transform, builds the site, trims the search index, verifies
    links, and uploads `report/` as a build artifact (30-day retention).
 4. Deploys to GitHub Pages and commits the new `.last-built-sha` stamp.

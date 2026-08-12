@@ -24,9 +24,10 @@ build/fixes_page.py     docs/fixes.md — plain-language corrections page
                         so John can gradually fix source errors
 build/trim_search.py    post-build: cap search-index text per section
 build/check_links.py    post-build: verify every link in site/
-.github/workflows/nightly.yml  nightly rebuild (14:00 UTC = midnight
-                        Brisbane), skip-if-unchanged, Pages deploy,
-                        .last-built-sha stamp commit
+.github/workflows/nightly.yml  hourly-poll rebuild (skip-if-unchanged),
+                        optional instant repository_dispatch trigger
+                        (setup/source-repo-workflow.yml goes in John's
+                        repo), Pages deploy, .last-built-sha stamp commit
 ```
 
 Full local build (see README for the exact commands): emit --all →

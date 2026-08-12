@@ -1,0 +1,36 @@
+# OPTIONAL one-time setup: instant rebuilds on every source commit.
+#
+# Copy this file into John's repository as:
+#   school-science-lessons/.github/workflows/notify-graphical-website.yml
+#
+# It runs on every push and asks the school-science-lessons-web repository
+# to rebuild immediately (instead of waiting for the hourly poll). It does
+# not touch any content and is invisible to the normal editing workflow.
+#
+# It needs one secret in John's repository:
+#   Settings -> Secrets and variables -> Actions -> New repository secret
+#   Name:  WEB_TRIGGER_TOKEN
+#   Value: a fine-grained personal access token (github.com/settings/tokens)
+#          scoped to ONLY the school-science-lessons-web repository, with
+#          "Contents: Read and write" permission, expiry e.g. 1 year.
+#
+# If the token ever expires, nothing breaks — the hourly poll still picks
+# up every change, just with up to an hour of delay.
+
+name: Notify graphical website
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger rebuild of the graphical website
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.WEB_TRIGGER_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/johnelfick/school-science-lessons-web/dispatches \
+            -d '{"event_type":"source-updated"}'
