@@ -28,7 +28,9 @@ def main() -> int:
     args = ap.parse_args()
     site = Path(args.site).resolve()
 
-    pages = sorted(site.rglob("*.html"))
+    # the corrections page quotes broken hrefs as text; don't scan it
+    pages = [p for p in sorted(site.rglob("*.html"))
+             if p.parent.name != "fixes"]
 
     @lru_cache(maxsize=512)
     def ids_of(path_str: str) -> frozenset:
