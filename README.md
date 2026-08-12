@@ -1,0 +1,74 @@
+# school-science-lessons-web
+
+Modern web edition of [School Science Lessons](https://johnelfick.github.io/school-science-lessons/)
+by Dr John Elfick. This repository holds the build pipeline that converts the
+original hand-written HTML into a modern MkDocs Material site, rebuilt
+automatically every night from the
+[source repository](https://github.com/johnelfick/school-science-lessons).
+
+The source repository is treated as read-only: the original site and its
+editing workflow are never modified.
+
+## Pipeline
+
+```
+.source/               fresh clone of johnelfick/school-science-lessons (not committed)
+build/transform.py     crawl from index.html -> parse sections -> validate links
+report/validation.md   per-build corpus health report
+report/site-index.json section index / link map (input for site generation)
+```
+
+Local run:
+
+```
+pip install -r requirements.txt
+git clone --depth 1 https://github.com/johnelfick/school-science-lessons .source
+python build/transform.py --source .source --out report
+```
+
+## Full build
+
+```
+python build/emit.py --source .source --docs docs --all   # all pages + nav
+python -m mkdocs build                                     # -> site/
+python build/trim_search.py                                # shrink search index
+python build/check_links.py                                # verify built links
+```
+
+## Nightly build (GitHub Actions)
+
+[.github/workflows/nightly.yml](.github/workflows/nightly.yml) runs every
+night at midnight Brisbane time (14:00 UTC):
+
+1. Clones the source repository (shallow).
+2. Skips the build if the source HEAD matches `.last-built-sha` (scheduled
+   runs only — manual and push-triggered runs always build).
+3. Runs the transform, builds the site, trims the search index, verifies
+   links, and uploads `report/` as a build artifact (30-day retention).
+4. Deploys to GitHub Pages and commits the new `.last-built-sha` stamp.
+   The stamp commit also keeps the scheduled workflow from being disabled
+   by GitHub's 60-day repository-inactivity rule.
+
+## One-time GitHub setup
+
+Needs to be done once, signed in to the `johnelfick` GitHub account
+(or after adding a collaborator):
+
+1. Create a new **public** repository named `school-science-lessons-web`
+   (empty — no README/.gitignore).
+2. Optional: Settings → Collaborators → add the maintainer's own account.
+3. Push this repository:
+   `git remote add origin https://github.com/johnelfick/school-science-lessons-web.git`
+   then `git push -u origin main`.
+4. Settings → Pages → **Build and deployment → Source: GitHub Actions**.
+5. Actions tab → "Nightly build and deploy" → **Run workflow** for the
+   first build. The site appears at
+   <https://johnelfick.github.io/school-science-lessons-web/>.
+
+## Status
+
+- Phase 1 (parser + corpus validation): done
+- Phase 2 (design + MkDocs skeleton): done
+- Phase 3 (full site generation, search tuning, link check): done
+- Phase 4 (nightly GitHub Action + Pages): workflow ready — awaiting the
+  one-time GitHub setup above

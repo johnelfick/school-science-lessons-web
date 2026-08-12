@@ -1,0 +1,292 @@
+site_name: School Science Lessons
+site_description: >-
+  Science experiments and lessons for primary and high schools — physics,
+  chemistry, biology, geology, agriculture and more. By Dr John Elfick,
+  School of Education, University of Queensland.
+site_url: https://johnelfick.github.io/school-science-lessons-web/
+site_author: Dr John Elfick
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  font:
+    text: Source Sans 3
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+  icon:
+    logo: material/flask-outline
+
+extra_css:
+  - assets/extra.css
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - admonition
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  # --- BEGIN GENERATED NAV (written by build/emit.py --all) ---
+  - Chemistry:
+    - "Heat substances": chemistry/UNChem1.md
+    - "Carbon dioxide": chemistry/UNChem1a.md
+    - "Ammonia": chemistry/UNChem1b.md
+    - "Sulfur dioxide": chemistry/UNChem2a.md
+    - "Fats in food": chemistry/UNChem2b.md
+    - "Acid-base indicators": chemistry/UNChemAcidBase.md
+    - "Images of Atoms": chemistry/UNChemImage.md
+    - "Ligands": chemistry/UNChemLigand.md
+    - "Mercury": chemistry/UNChemMercury1.md
+    - "Prepare chemicals": chemistry/UNChemPrepare.md
+    - "Periodic Table": chemistry/UNChemTable1.md
+    - "Terms in the Table of the Elements": chemistry/UNChemTable2.md
+    - "Chemistry terminology": chemistry/UNChemTable.md
+    - "Chemistry Tests": chemistry/UNChemTests.md
+  - Physics:
+    - "Measurement": physics/UNPh05.md
+    - "Laboratory equipment": physics/UNPh06.md
+    - "Safety Rules": physics/UNPh07.md
+    - "Mass and weight": physics/UNPh08.md
+    - "Energy": physics/UNPh09.md
+    - "Archimedes": physics/UNPh10.md
+    - "Density": physics/UNPh11.md
+    - "Pressure": physics/UNPh12.md
+    - "Air pressure": physics/UNPh12a.md
+    - "Barometers": physics/UNPh13.md
+    - "Speed and acceleration": physics/UNPh14.md
+    - "Circular motion": physics/UNPh15.md
+    - "Force": physics/UNPh16.md
+    - "Collisions": physics/UNPh17.md
+    - "Rotation": physics/UNPh18.md
+    - "Surface tension": physics/UNPh19.md
+    - "Gas Laws": physics/UNPh20.md
+    - "Devises": physics/UNPh21.md
+    - "Heat": physics/UNPh22.md
+    - "Heat radiation": physics/UNPh23.1.md
+    - "Heat transfer": physics/UNPh23.md
+    - "Change of state": physics/UNPh24.md
+    - "Wave motion": physics/UNPh25.md
+    - "Speed of sound": physics/UNPh26.1.md
+    - "Sound": physics/UNPh26.md
+    - "Spectrum": physics/UNPh27.md
+    - "Refraction of light rays": physics/UNPh28.1.md
+    - "Reflection of light rays": physics/UNPh28.md
+    - "Magnets": physics/UNPh29.1.md
+    - "Magnetism": physics/UNPh29.md
+    - "Alternating currents and voltages": physics/UNPh30.1.md
+    - "Electromagnets": physics/UNPh30.md
+    - "Electroscopes": physics/UNPh31.1.md
+    - "Electrostatics": physics/UNPh31.md
+    - "Electrical resistance": physics/UNPh32.1.md
+    - "Electricity in motor vehicles": physics/UNPh32.5.md
+    - "Electric circuits": physics/UNPh32.md
+    - "Electrical batteries": physics/UNPh33.1.md
+    - "Electric Current": physics/UNPh33.md
+    - "Materials": physics/UNPh34.md
+    - "Geology Fieldwork": physics/UNPh35.1.md
+    - "Geology": physics/UNPh35.md
+    - "Astronomy bodies": physics/UNPh36.1.md
+    - "Astronomy": physics/UNPh36.md
+    - "Environment": physics/UNPh37.1.md
+    - "Weather": physics/UNPh37.md
+    - "Electronics circuits": physics/UNPh38.1.md
+    - "Electronics": physics/UNPh38.md
+    - "Physics Experiments": physics/UNPhysicsTable.md
+  - Biology:
+    - "Plant anatomy": biology/UNBiol1.md
+    - "Communities": biology/UNBiol1a.md
+    - "Optical illusions": biology/UNBiol1b.md
+    - "Animal Kingdom": biology/UNBiol2.md
+    - "Genetics": biology/UNBiol3.md
+    - "Sexuality Education": biology/UNBiol5a.md
+    - "Drug Abuse": biology/UNBiol5b.md
+    - "Sexually transmitted infections": biology/UNBiol5c.md
+    - "Food tests": biology/UNBiol6.md
+    - "Osmosis and Plasmolysis": biology/UNBiol7.md
+    - "Bacteria": biology/UNBiol8.md
+    - "Biodiversity": biology/UNBiolDiversity.md
+    - "Non-flowering Plants": biology/UNBiolN2NotFlow.md
+    - "Genus names A, (Abelia to Anisoptera)": biology/UNBiolN3A.md
+    - "Genus names A, (Annona to Azadirachta)": biology/UNBiolN3AA.md
+    - "Genus names B, (Baccaurea to Buxus)": biology/UNBiolN3B.md
+    - "Genus names C, (Cabomba to Chrysopogon)": biology/UNBiolN3C.md
+    - "Genus names C, (Cicer to Cystisus)": biology/UNBiolN3CC.md
+    - "Genus names D, (Dacrydium to Dysphania)": biology/UNBiolN3D.md
+    - "Genus names E, (Ecballium to Fumaria)": biology/UNBiolN3E.md
+    - "Genus names, F, (Fagopyrum to Fumaria)": biology/UNBiolN3F.md
+    - "Genus names G to H, (Gahnia to Gynura)": biology/UNBiolN3G.md
+    - "Genus names H, (Haematoxylon to Hyssopus)": biology/UNBiolN3H.md
+    - "Genus names I, (Iberis to Kunzea)": biology/UNBiolN3IJK.md
+    - "Genus names L, (Lablab to Lythrum)": biology/UNBiolN3L.md
+    - "M, (Macadamia to Myrsine)": biology/UNBiolN3M.md
+    - "Genus names, N, (Nandina to Nyssa)": biology/UNBiolN3N.md
+    - "Genus names O, (Ochna to Ozothamnus)": biology/UNBiolN3O.md
+    - "Genus names P, (Pachira to Phytolacca)": biology/UNBiolN3P.md
+    - "Genus names P, (Picrasma to Pyrus)": biology/UNBiolN3PP.md
+    - "Genus names Q, R, Quararibea to Rubia": biology/UNBiolN3QR.md
+    - "S, (Sabal to Syzygium)": biology/UNBiolN3S.md
+    - "Genus names S, (Stachys to Syzygium)": biology/UNBiolN3SS.md
+    - "Genus names T, (Tabebuia to Typhonium)": biology/UNBiolN3T.md
+    - "Genus names U to Z": biology/UNBiolN3UZ.md
+    - "Plant classification": biology/UNBiolNFamily.md
+    - "Plant Kingdom": biology/UNBiology1.md
+    - "Flowering plant reproduction": biology/UNBiology1a.md
+    - "Human Physiology": biology/UNBiology2.md
+    - "Human Body": biology/UNBiology3.md
+    - "Microbiology Techniques": biology/UNBiology4.md
+    - "Microorganisms": biology/UNBiology4a.md
+    - "Hydroponics": biology/UNBiology6.md
+    - "Photosynthesis": biology/UNBiology6a.md
+    - "Plant physiology": biology/UNBiology7.md
+    - "Fungi": biology/UNBiology8.md
+    - "Viruses": biology/UNBiology9.md
+    - "Biology topics, common names, and genus names, A to Z": biology/UNBiologyTable.md
+  - Primary science:
+    - "Primary Science Lessons, Year 1": primary/year1.md
+    - "Primary Science Lessons, Year 2": primary/year2.md
+    - "Primary Science Lessons, Year 3": primary/year3.md
+    - "Primary Science Lessons, Year 4": primary/year4.md
+    - "Primary Science Lessons, Year 5": primary/year5.md
+    - "Primary Science Lessons, Year 6": primary/year6.md
+  - Agriculture:
+    - Food gardens:
+      - "Agriculture": foodgardens/Foodgardens1.md
+      - "Crop care": foodgardens/Foodgardens2.md
+      - "Composting": foodgardens/Foodgardens3.md
+      - "Agricultural chemicals": foodgardens/Foodgardens4.md
+      - "Agricultural crops": foodgardens/Foodgardens5.md
+      - "Common names of plants, A to F": foodgardens/Foodgardens5a.md
+      - "Australian native foods": foodgardens/Foodgardens5b.md
+      - "Common names of plants, G to R": foodgardens/Foodgardens6.md
+      - "Common names of plants, S to Z": foodgardens/Foodgardens6a.md
+    - Soils:
+      - "Composition of Soils": soils/Soils1.md
+      - "Soil fertility": soils/Soils2.md
+      - "Soil minerals": soils/Soils3.md
+    - School projects:
+      - "Banana Project": projects/ProjBan.md
+      - "Breadfruit Project": projects/ProjBread.md
+      - "Cassava Project": projects/ProjCas.md
+      - "Chicken Project 1": projects/ProjChick1.md
+      - "Chicken diseases": projects/ProjChick2.md
+      - "Chilli Project": projects/ProjChilli.md
+      - "Cocoa Project": projects/ProjCocoa1.md
+      - "Cocoa Diseases": projects/ProjCocoa2.md
+      - "Coconut Project": projects/ProjCocon1.md
+      - "Coconut diseases": projects/ProjCocon2.md
+      - "Duck Project": projects/ProjDuck.md
+      - "Goat Project": projects/ProjGoat.md
+      - "Herbs are easy to grow": projects/ProjHerb.md
+      - "Papaya Project": projects/ProjPap.md
+      - "Pig Project": projects/ProjPig.md
+      - "Pineapple project": projects/ProjPine.md
+      - "Floral Emblem of Australia": projects/ProjSchool.md
+      - "Sweet Potato Project": projects/ProjSPot.md
+      - "Equipment for science curriculum": projects/ProjStequ1.md
+      - "Taro Project": projects/ProjTaro.md
+      - "Yam Project": projects/ProjYam.md
+  - Topics:
+    - "Science, Maths and Technology": topics/topic01.md
+    - "Laboratory Safety": topics/topic03.md
+    - "Hazzards": topics/topic04.md
+    - "Solutions": topics/topic05.md
+    - "International System of Units": topics/topic06a.md
+    - "Study the elements": topics/topic07.md
+    - "Colloids and crystalloids": topics/topic07a.md
+    - "Chemical changes": topics/topic07b.md
+    - "Heat sources": topics/topic08.md
+    - "Crystals and polymers": topics/topic09.md
+    - "Separation": topics/topic10.md
+    - "Brownian motion": topics/topic11.md
+    - "Acids": topics/topic12.md
+    - "Chemical reactions": topics/topic12A.md
+    - "Chemistry of metals": topics/topic12B.md
+    - "Chemistry of halogens": topics/topic12C.md
+    - "Chemistry of alkalis": topics/topic12D.md
+    - "Acid-base neutralization": topics/topic12E.md
+    - "Chemistry of sulfur": topics/topic12F.md
+    - "Prepare gases": topics/topic13.md
+    - "Heat of reactions": topics/topic14.md
+    - "Oxidation": topics/topic15.md
+    - "Electrolysis and Electroplating": topics/topic15a.md
+    - "Organic chemistry": topics/topic16.md
+    - "Aliphatic and Aromatic Compounds": topics/topic16a.md
+    - "Organic chemistry, Amines to Proteins": topics/topic16b.md
+    - "Plant Oils": topics/topic16c.md
+    - "Dairy products": topics/topic16d.md
+    - "Phytochemicals": topics/topic16e.md
+    - "Phytochemicals, Araloside toTangshenoside": topics/topic16g.md
+    - "Rates of reaction": topics/topic17.md
+    - "Chemistry of the Environment": topics/topic18.md
+    - "Chemistry of swimming pools": topics/topic18a.md
+    - "Chemistry of food": topics/topic19.md
+    - "Food Additives and Food Preservation": topics/topic19a.md
+    - "Chemicals in the home": topics/topic19b.md
+    - "Chemical index A–Z":
+      - "Chemistry, Aa to Ac": topics/topicIndexAaAc.md
+      - "Chemistry Experiments, Ad to Az": topics/topicIndexAd-Az.md
+      - "Chemistry Experiments, B": topics/topicIndexB.md
+      - "Chemistry Experiments, Ca to Ch": topics/topicIndexCaCh.md
+      - "Chemistry Experiments, Calcium": topics/topicIndexCalcium.md
+      - "Chemistry Experiments, Carbon": topics/topicIndexCarbon.md
+      - "Chemistry Experiments, Ci to Cy": topics/topicIndexCiCy.md
+      - "Chemistry Experiments, D": topics/topicIndexD.md
+      - "Chemistry Experiments, E": topics/topicIndexE.md
+      - "Chemistry Experiments, F": topics/topicIndexF.md
+      - "Chemistry Experiments, G": topics/topicIndexG.md
+      - "Chemistry Experiments, H": topics/topicIndexH.md
+      - "Chemistry Experiments, I, J, K": topics/topicIndexIJK.md
+      - "Chemistry Experiments, L": topics/topicIndexL.md
+      - "Chemistry Experiments, M": topics/topicIndexM.md
+      - "Chemistry Experiments, Mg, Mn": topics/topicIndexMg.md
+      - "Chemistry Experiments, N": topics/topicIndexN.md
+      - "Chemistry Experiments, O": topics/topicIndexO.md
+      - "Chemistry Experiments, P": topics/topicIndexP.md
+      - "Chemistry Experiments, Potasium": topics/topicIndexPotassium.md
+      - "Chemistry Experiments, Q, R": topics/topicIndexQR.md
+      - "Chemistry Experiments, S": topics/topicIndexS.md
+      - "Chemistry Experiments, Sodium": topics/topicIndexSodium.md
+      - "Chemistry Experiments, T": topics/topicIndexT.md
+      - "Chemistry Experiments, U, V, W": topics/topicIndexUVW.md
+      - "Chemistry Experiments, X, Y, Z": topics/topicIndexXYZ.md
+  - Appendices:
+    - "Appendix A, Amines and Alkaloids": appendices/appendixA.md
+    - "Appendix B, Biology preparations": appendices/appendixB.md
+    - "Appendix C, List of Chemicals": appendices/appendixC.md
+    - "Appendix D, Polymers and plastics": appendices/appendixD.md
+    - "Low-cost chemicals": appendices/appendixE.md
+    - "Alkaloids, Acanthicifoline to Hypaconitine": appendices/appendixF.md
+    - "Acacetin to Yuanhuacine": appendices/appendixG.md
+    - "Alkaloids, Ibogaine to Zizyphine": appendices/appendixH.md
+  # --- END GENERATED NAV ---
+  - About:
+      - Image credits: credits.md
+      - Websites: websites.md
+      - Greek alphabet: GreekAlphabet.md

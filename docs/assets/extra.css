@@ -1,0 +1,179 @@
+/* ---- School Science Lessons: design tokens -------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');
+
+:root {
+  --md-primary-fg-color: #14614e;        /* eucalyptus green */
+  --md-primary-fg-color--light: #3d8a75;
+  --md-primary-fg-color--dark: #0c4638;
+  --md-accent-fg-color: #b95f14;         /* warm ochre */
+  --ssl-paper: #f7f4ec;                  /* aged-paper tint for cards/figures */
+  --ssl-card-border: rgba(20, 97, 78, 0.18);
+}
+
+[data-md-color-scheme="slate"] {
+  --ssl-paper: #23282e;
+  --ssl-card-border: rgba(120, 190, 170, 0.25);
+}
+
+/* Headings in a warm editorial serif */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.md-typeset h1 { color: var(--md-primary-fg-color); }
+[data-md-color-scheme="slate"] .md-typeset h1 { color: #7fc4ae; }
+
+/* Dense reference content: tighter paragraph rhythm */
+.md-typeset p { margin: 0.35em 0; }
+.md-typeset h2 { margin-top: 1.8em; }
+.md-typeset h3 { margin-top: 1.2em; }
+
+/* ---- Figures (John's diagrams, inlined) ----------------------------- */
+
+.ssl-figure {
+  margin: 1rem auto;
+  padding: 0.8rem 0.8rem 0.5rem;
+  max-width: min(560px, 100%);
+  background: var(--ssl-paper);
+  border: 1px solid var(--ssl-card-border);
+  border-radius: 10px;
+  text-align: center;
+}
+.ssl-figure img {
+  max-width: 100%;
+  height: auto;
+  background: #ffffff;
+  border-radius: 4px;
+}
+.ssl-figure figcaption {
+  font-size: 0.72rem;
+  margin-top: 0.4rem;
+  color: var(--md-default-fg-color--light);
+  font-style: italic;
+}
+
+/* ---- Tables from legacy content ------------------------------------- */
+
+.md-typeset .ssl-table-wrap { overflow-x: auto; }
+.md-typeset .ssl-table-wrap table {
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+.md-typeset .ssl-table-wrap td,
+.md-typeset .ssl-table-wrap th {
+  border: 1px solid var(--ssl-card-border);
+  padding: 0.25rem 0.6rem;
+}
+
+/* ---- Per-page provenance footer ------------------------------------- */
+
+.ssl-source {
+  margin-top: 2.5rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--ssl-card-border);
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---- Landing page ---------------------------------------------------- */
+
+.ssl-hero {
+  text-align: center;
+  padding: 2.5rem 0 1.5rem;
+}
+.ssl-hero h1 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  color: var(--md-primary-fg-color);
+}
+[data-md-color-scheme="slate"] .ssl-hero h1 { color: #7fc4ae; }
+.ssl-hero p.ssl-tagline {
+  font-size: 1.05rem;
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--md-default-fg-color--light);
+}
+.ssl-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin: 1.6rem 0 0.5rem;
+}
+.ssl-stats .ssl-stat { text-align: center; }
+.ssl-stats .ssl-stat b {
+  display: block;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.6rem;
+  color: var(--md-primary-fg-color);
+}
+[data-md-color-scheme="slate"] .ssl-stats .ssl-stat b { color: #7fc4ae; }
+.ssl-stats .ssl-stat span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-default-fg-color--light);
+}
+
+.ssl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+a.ssl-card {
+  display: block;
+  border: 1px solid var(--ssl-card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+a.ssl-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(20, 97, 78, 0.18);
+}
+.ssl-card .ssl-card-img {
+  aspect-ratio: 16 / 10;
+  background: var(--ssl-paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ssl-card .ssl-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;   /* lets the paper tint show through engravings */
+}
+[data-md-color-scheme="slate"] .ssl-card .ssl-card-img img {
+  mix-blend-mode: normal;
+}
+.ssl-card .ssl-card-img .ssl-card-glyph {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 3rem;
+  color: var(--md-primary-fg-color);
+  opacity: 0.55;
+}
+.ssl-card .ssl-card-body {
+  padding: 0.7rem 0.9rem 0.9rem;
+}
+.ssl-card .ssl-card-body b {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 0.95rem;
+}
+.ssl-card .ssl-card-body span {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+  margin-top: 0.15rem;
+}

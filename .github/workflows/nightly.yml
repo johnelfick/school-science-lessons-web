@@ -1,0 +1,105 @@
+name: Nightly build and deploy
+
+on:
+  schedule:
+    - cron: "0 14 * * *"   # 14:00 UTC = midnight Brisbane (AEST, no DST)
+  workflow_dispatch: {}     # manual runs from the Actions tab
+  push:
+    branches: [main]        # rebuild when the pipeline itself changes
+
+permissions:
+  contents: write           # stamp-file commit (also keeps the schedule alive)
+  pages: write
+  id-token: write
+
+concurrency:
+  group: nightly-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v4
+
+      - name: Clone the source site (John's repository)
+        run: git clone --depth 1 https://github.com/johnelfick/school-science-lessons .source
+
+      - name: Check whether the source changed since the last build
+        id: changes
+        run: |
+          SRC_SHA=$(git -C .source rev-parse HEAD)
+          LAST=$(cat .last-built-sha 2>/dev/null || echo none)
+          echo "src=$SRC_SHA" >> "$GITHUB_OUTPUT"
+          if [ "$SRC_SHA" = "$LAST" ] && [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "Source unchanged ($SRC_SHA); skipping nightly rebuild."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Python
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        if: steps.changes.outputs.changed == 'true'
+        run: pip install -r requirements.txt
+
+      - name: Transform content and generate pages
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          python build/transform.py --source .source --out report
+          python build/emit.py --source .source --docs docs --all
+
+      - name: Build site
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          python -m mkdocs build
+          python build/trim_search.py
+
+      - name: Verify links in built site
+        if: steps.changes.outputs.changed == 'true'
+        run: python build/check_links.py --max-report 100 > report/link-check.txt || true
+
+      - name: Upload build reports (validation, best-guess log, link check)
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: report/
+          retention-days: 30
+
+      - name: Upload site for Pages deployment
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Record the built source revision (stamp commit)
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          echo "${{ steps.changes.outputs.src }}" > .last-built-sha
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .last-built-sha
+          git diff --cached --quiet || git commit -m "Build stamp: source ${{ steps.changes.outputs.src }}"
+          git push
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
