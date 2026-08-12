@@ -17,7 +17,7 @@ from functools import lru_cache
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-HREF_RE = re.compile(r"""(?:href|src)=["']([^"']+)["']""")
+HREF_RE = re.compile(r"""(?<![-\w])(?:href|src)=["']([^"']+)["']""")
 ID_RE = re.compile(r"""(?:id|name)=["']([^"']+)["']""")
 
 
