@@ -213,8 +213,14 @@ class Emitter:
         return str(node)
 
     def render_block(self, nodes: list, source_rel: str,
-                     skip_frag_link_lines: bool) -> list[str]:
-        """Render a block's nodes into a list of HTML chunks."""
+                     skip_frag_link_lines) -> list[str]:
+        """Render a block's nodes into a list of HTML chunks.
+
+        skip_frag_link_lines: False keeps everything; True drops every line
+        that starts with a same-page fragment link (page-level contents);
+        a set drops only lines whose leading link targets an anchor in the
+        set (a group's claimed children, which become nested headings).
+        """
         chunks: list[str] = []
         parts: list[str] = []
 
@@ -231,10 +237,14 @@ class Emitter:
                         f'<a href="{src}"><img src="{src}" alt="{html.escape(caption)}" loading="lazy"></a>'
                         f"<figcaption>{html.escape(caption)}</figcaption></figure>")
                 return
-            is_frag_line = bool(
-                re.match(r'^<a href="#', visible)) or bool(
-                re.match(r'^<span id="[^"]*">[^<]*</span>\s*<a href="#', visible))
-            if visible and not (skip_frag_link_lines and is_frag_line):
+            m = re.match(
+                r'^[|\s]*(?:<span id="[^"]*">[^<]*</span>\s*)?[|\s]*<a href="#([^"]*)"',
+                visible)
+            skip = False
+            if m and skip_frag_link_lines:
+                skip = (skip_frag_link_lines is True
+                        or unquote(m.group(1)) in skip_frag_link_lines)
+            if visible and not skip:
                 chunks.append(f"<p>{visible}</p>")
 
         def flush():
@@ -296,14 +306,6 @@ class Emitter:
             kept.append(c)
         return kept
 
-    def heading_level(self, number: str | None) -> int:
-        if not number:
-            return 2
-        parts = number.split(".")
-        if len(parts) <= 2 or parts[-1] == "0":
-            return 2
-        return 3
-
     def emit_page(self, rel: str) -> Path:
         page = self.pages[rel]
         warnings: list[str] = []
@@ -340,6 +342,10 @@ class Emitter:
                        f"by Dr John Elfick</p>")
             out.append("")
 
+        # ---- gather sections and attach anchor-less continuation blocks
+        sections = [by_index[i] for i in sorted(by_index) if by_index[i] is not titled]
+        sec_blocks: dict[int, list[list]] = {}   # section block_index -> node lists
+        prev = None
         for i, nodes in enumerate(blocks):
             section = by_index.get(i)
             if section is titled or (i == 0 and section is None):
@@ -349,18 +355,87 @@ class Emitter:
                 self.note_stray_anchors(nodes, emitted_ids, out)
                 continue
             if section is None:
-                out.extend(self.render_block(nodes, rel, False))
-                out.append("")
+                if prev is not None:
+                    sec_blocks[prev.block_index].append(nodes)
+                else:
+                    out.extend(self.render_block(nodes, rel, False))
+                    out.append("")
                 continue
+            sec_blocks[section.block_index] = [nodes]
+            prev = section
 
-            level = self.heading_level(section.number)
-            head = f"{section.number} {section.title}" if section.number else section.title
+        # ---- build the section tree from John's contents lists.
+        # A group block's list of same-page links names its children and
+        # their intended order; section numbers are too unreliable to use.
+        anchor_to_sec = {}
+        for s in sections:
+            anchor_to_sec.setdefault(s.anchor, s)
+            for a in s.extra_anchors:
+                anchor_to_sec.setdefault(a, s)
+
+        def frag_targets(node_lists) -> list[str]:
+            found = []
+            for nodes in node_lists:
+                found.extend(T.leading_frag_info(nodes)[0])
+            return found
+
+        parent: dict[int, Section] = {}          # child block_index -> group
+        kids: dict[int, list] = {}               # group block_index -> children
+
+        def is_ancestor(candidate, s) -> bool:
+            while s is not None:
+                if s is candidate:
+                    return True
+                s = parent.get(s.block_index)
+            return False
+
+        for s in sections:
+            if s.kind != "contents-list":
+                continue
+            for frag in frag_targets(sec_blocks.get(s.block_index, [])):
+                child = anchor_to_sec.get(frag)
+                if child is None or child is s or child.block_index in parent \
+                        or is_ancestor(child, s):
+                    continue
+                parent[child.block_index] = s
+                kids.setdefault(s.block_index, []).append(child)
+
+        # top-level order: the page contents list first, then file order
+        top_frags = frag_targets([blocks[titled.block_index]]) if titled else []
+        top_listed = []
+        for frag in top_frags:
+            s = anchor_to_sec.get(frag)
+            if s is not None and s.block_index not in parent and s not in top_listed:
+                top_listed.append(s)
+        roots = top_listed + [s for s in sections
+                              if s.block_index not in parent and s not in top_listed]
+
+        if parent:
+            self.note(rel, f"nested {len(parent)} sections under "
+                           f"{len(kids)} groups per contents lists")
+
+        # ---- emit depth-first
+        emitted_secs: set[int] = set()
+
+        def emit_subtree(section, level: int):
+            if section.block_index in emitted_secs:
+                return
+            emitted_secs.add(section.block_index)
+            head = f"{section.number} {section.title}" if section.number \
+                else section.title
             head = head.strip() or section.anchor
-            out.append(f'{"#" * level} {head} {{#{section.anchor}}}')
+            out.append(f'{"#" * min(level, 4)} {head} {{#{section.anchor}}}')
             emitted_ids.add(section.anchor)
             out.append("")
-            skip = section.kind == "contents-list"
-            body = self.render_block(nodes, rel, skip_frag_link_lines=skip)
+            own_kids = kids.get(section.block_index, [])
+            if section.kind == "contents-list":
+                skip = {c.anchor for c in own_kids} | \
+                       {a for c in own_kids for a in c.extra_anchors}
+            else:
+                skip = False
+            body = []
+            for nodes in sec_blocks.get(section.block_index, []):
+                body.extend(self.render_block(nodes, rel, skip_frag_link_lines=skip))
             head_norm = self.plain(f"<p>{head}</p>").lower()
             body = [c for j, c in enumerate(body)
                     if not (j < 2 and self.plain(c).lower() == head_norm)]
@@ -370,6 +445,13 @@ class Emitter:
                                f"render ({size // 1000} KB) — check structure")
             out.extend(body)
             out.append("")
+            for child in own_kids:
+                emit_subtree(child, level + 1)
+
+        for s in roots:
+            emit_subtree(s, 2)
+        for s in sections:      # safety net: anything cycle-broken or orphaned
+            emit_subtree(s, 2)
 
         out.append("---")
         out.append("")

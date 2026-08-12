@@ -101,14 +101,34 @@ KNOWN_TAGS = {
 
 
 def sanitize_soup(soup: BeautifulSoup) -> list[str]:
-    """Unwrap non-HTML tags (e.g. John's literal <sun>) so they cannot
-    swallow the rest of the document. Returns a list of actions taken,
-    for the build log."""
+    """Best-guess repairs of malformed markup, logged for review.
+
+    - Unwrap non-HTML tags (e.g. a literal <sun>) so they cannot swallow
+      the rest of the document.
+    - Close unterminated links: an <a href> that ends up containing <br>,
+      <hr> or another <a> was never closed in the source (links are always
+      single-line in this corpus); everything from the first such element
+      onward is moved back out of the link.
+    """
     actions = []
     for el in soup.find_all(True):
         if el.name not in KNOWN_TAGS:
             actions.append(f"unwrapped unknown tag <{el.name}>")
             el.unwrap()
+    for a in soup.find_all("a", href=True):
+        if a.find(["br", "hr", "a"]) is None:
+            continue
+        actions.append(f"closed unterminated link ({a.get('href', '')[:60]})")
+        moved, move = False, []
+        for child in list(a.children):
+            if not moved and isinstance(child, Tag) and (
+                    child.name in ("br", "hr", "a")
+                    or child.find(["br", "hr", "a"]) is not None):
+                moved = True
+            if moved:
+                move.append(child)
+        for node in reversed(move):
+            a.insert_after(node)
     return actions
 
 
@@ -199,22 +219,59 @@ def anchor_line_title(nodes: list, anchor_name: str) -> str | None:
             if isinstance(sib, Tag) and sib.name in ("br", "hr", "table"):
                 break
             parts.append(sib.get_text() if isinstance(sib, Tag) else str(sib))
-        return " ".join("".join(parts).split())
+        title = " ".join("".join(parts).split())
+        # John sometimes puts a "See diagram" link on the title line
+        return re.split(r"\s+See diagram\b", title)[0].strip()
     return None
 
 
-def classify_block(nodes: list, lines: list[str]) -> str:
-    """A block whose links are mostly to same-page anchors is a contents list."""
-    links = []
+def leading_frag_info(nodes: list) -> tuple[list[str], int]:
+    """Per-line analysis: which lines BEGIN with a same-page fragment link.
+
+    Returns (targets of leading fragment links in order, number of non-empty
+    lines). Only leading links count — inline cross-references inside prose
+    must not make a block look like a contents list, nor claim children.
+    """
+    lines: list[list] = [[]]
+
+    def walk(n):
+        if isinstance(n, NavigableString):
+            lines[-1].append(("text", str(n)))
+        elif isinstance(n, Tag):
+            if n.name == "br":
+                lines.append([])
+            elif n.name in ("script", "style"):
+                return
+            elif n.name == "a" and n.get("href") is not None:
+                href = (n.get("href") or "").strip()
+                target = unquote(href[1:]) if href.startswith("#") else None
+                lines[-1].append(("link", target))
+            else:
+                for c in n.children:
+                    walk(c)
+
     for n in nodes:
-        if isinstance(n, Tag):
-            if n.name == "a" and n.get("href"):
-                links.append(n["href"])
-            links.extend(a["href"] for a in n.find_all("a", href=True))
-    if len(links) >= 3:
-        frag_links = sum(1 for h in links if h.startswith("#"))
-        if frag_links / len(links) > 0.6:
-            return "contents-list"
+        walk(n)
+
+    targets, n_lines = [], 0
+    for toks in lines:
+        meaningful = [t for t in toks
+                      if not (t[0] == "text"
+                              and re.fullmatch(r"[\s|,.:;·•-]*", t[1]))]
+        if not meaningful:
+            continue
+        n_lines += 1
+        kind, value = meaningful[0]
+        if kind == "link" and value:
+            targets.append(value)
+    return targets, n_lines
+
+
+def classify_block(nodes: list, lines: list[str]) -> str:
+    """A block where most lines begin with same-page links is a contents list."""
+    targets, n_lines = leading_frag_info(nodes)
+    if len(targets) >= 3 and n_lines and len(targets) / n_lines > 0.5:
+        return "contents-list"
     return "content"
 
 
