@@ -127,6 +127,12 @@ def main() -> int:
                     f"The text contains <code>&lt;{esc(tag)}&gt;</code>, which is "
                     f"not a real HTML tag. It should probably be removed or "
                     f"spelled differently.")
+            elif w.startswith("rebuilt table"):
+                html_problems[p.path].append(
+                    "A table is written without <code>&lt;tr&gt;</code> and "
+                    "<code>&lt;td&gt;</code> row tags, so browsers show its "
+                    "text outside the table. Each row needs "
+                    "<code>&lt;tr&gt;&lt;td&gt;...&lt;/td&gt;&lt;/tr&gt;</code> tags.")
             elif "</body> tags" in w:
                 html_problems[p.path].append(
                     "The file contains <code>&lt;/body&gt;&lt;/html&gt;</code> in "

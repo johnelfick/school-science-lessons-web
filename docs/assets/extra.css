@@ -85,18 +85,26 @@
   font-style: italic;
 }
 
-/* ---- Tables from legacy content ------------------------------------- */
+/* ---- Tables from legacy content -------------------------------------
+   Tables size to their content and shrink (wrapping cell text) up to the
+   page width; the wrapper only scrolls when a table genuinely cannot fit. */
 
 .md-typeset .ssl-table-wrap { overflow-x: auto; }
-.md-typeset .ssl-table-wrap table {
+.md-typeset table.ssl-table {
+  display: table;
+  width: max-content;
+  max-width: 100%;
   border-collapse: collapse;
   font-size: 0.72rem;
 }
-.md-typeset .ssl-table-wrap td,
-.md-typeset .ssl-table-wrap th {
+.md-typeset table.ssl-table td,
+.md-typeset table.ssl-table th {
   border: 1px solid var(--ssl-card-border);
   padding: 0.25rem 0.6rem;
 }
+
+/* Images anywhere in content shrink to fit rather than overflow */
+.md-typeset img { max-width: 100%; height: auto; }
 
 /* ---- Per-page provenance footer ------------------------------------- */
 

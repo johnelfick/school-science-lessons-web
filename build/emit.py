@@ -205,12 +205,18 @@ class Emitter:
             target, _ = T.resolve_href(source_rel, img["src"])
             if target:
                 img["src"] = self.image_url(source_rel, target)
+        # Serialize on ONE line: blank lines inside a raw HTML block make the
+        # Markdown parser split it and strip tags (<tr>/<td> vanish).
+        compact = str(node) if node.name == "pre" \
+            else re.sub(r"[ \t]*\n[ \t]*", " ", str(node))
         if node.name == "table":
             for attr in ("border", "width", "cellpadding", "cellspacing", "bgcolor"):
                 if node.get(attr) is not None:
                     del node[attr]
-            return f'<div class="ssl-table-wrap">\n{node}\n</div>'
-        return str(node)
+            node["class"] = "ssl-table"   # opts out of Material's table wrapper
+            compact = re.sub(r"[ \t]*\n[ \t]*", " ", str(node))
+            return f'<div class="ssl-table-wrap">{compact}</div>'
+        return compact
 
     def render_block(self, nodes: list, source_rel: str,
                      skip_frag_link_lines) -> list[str]:
@@ -256,7 +262,7 @@ class Emitter:
                 "<tr>" + "".join(f"<td>{c.strip()}</td>" for c in row) + "</tr>"
                 for row in cells[1:])
             chunks.append(
-                f'<div class="ssl-table-wrap"><table>'
+                f'<div class="ssl-table-wrap"><table class="ssl-table">'
                 f"<thead><tr>{head}</tr></thead><tbody>{body}</tbody>"
                 f"</table></div>")
 

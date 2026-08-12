@@ -133,6 +133,27 @@ def sanitize_soup(soup: BeautifulSoup) -> list[str]:
                 move.append(child)
         for node in reversed(move):
             a.insert_after(node)
+    # Tables written without <tr>/<td> tags (bare text lines, blank line
+    # between rows): browsers hoist the text out of the table. Rebuild the
+    # rows from the text layout.
+    for tbl in soup.find_all("table"):
+        if tbl.find("tr") is not None:
+            continue
+        rows_txt = [b for b in re.split(r"\n\s*\n+", tbl.get_text())
+                    if b.strip()]
+        if len(rows_txt) < 2:
+            continue
+        tbl.clear()
+        tbody = soup.new_tag("tbody")
+        tbl.append(tbody)
+        for r in rows_txt:
+            tr = soup.new_tag("tr")
+            tbody.append(tr)
+            for cell in (ln.strip() for ln in r.split("\n") if ln.strip()):
+                td = soup.new_tag("td")
+                td.string = cell
+                tr.append(td)
+        actions.append("rebuilt table written without <tr>/<td> row tags")
     return actions
 
 
