@@ -1,4 +1,10 @@
-"""Phase 1: crawl, parse and validate the school-science-lessons corpus.
+"""Crawl, parse and validate the school-science-lessons corpus.
+
+IMPORTANT: the source HTML is hand-written with many recurring quirks
+(unclosed tags, invented tags, misplaced anchors, tables without cells,
+evolving formats). Every quirk this file handles is catalogued with
+examples in QUIRKS.md next to this file — read it first, and add an
+entry whenever new handling is added here.
 
 Reads John's source repo (legacy HTML), discovers all pages reachable from
 index.html, splits every page into <hr>-delimited sections keyed by

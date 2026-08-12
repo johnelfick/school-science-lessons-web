@@ -1,4 +1,9 @@
-"""Phase 2/3: emit MkDocs pages from the parsed corpus.
+"""Emit MkDocs pages from the parsed corpus.
+
+IMPORTANT: structure derivation, link healing and the readability
+enhancements in this file all follow rules documented with examples in
+QUIRKS.md (same directory) — read it first, and add an entry whenever
+new handling is added here. Core invariants live in /CLAUDE.md.
 
 Converts each legacy page into a Markdown file: sections become headings that
 keep their original anchor ids (so old #fragments still work), "See diagram"

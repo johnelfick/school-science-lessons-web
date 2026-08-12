@@ -9,6 +9,15 @@ automatically every night from the
 The source repository is treated as read-only: the original site and its
 editing workflow are never modified.
 
+## Documentation
+
+- [CLAUDE.md](CLAUDE.md) — project guide: architecture, core invariants,
+  pending work. Start here.
+- [build/QUIRKS.md](build/QUIRKS.md) — the catalogue of source-HTML
+  quirks (human errors and format variants) the pipeline handles, with
+  examples and code pointers. Required reading before changing
+  transform.py or emit.py.
+
 ## Pipeline
 
 ```
