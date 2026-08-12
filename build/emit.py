@@ -335,6 +335,10 @@ class Emitter:
                 visible = re.sub(
                     r"^((?:\(\w{1,2}\)|\d+(?:\.\d+)+\.?|\d+[a-z]?[.)]))(\s)",
                     r'<b class="ssl-num">\1</b>\2', visible)
+                # missing space after the marker: "4.Sunglasses"
+                visible = re.sub(
+                    r"^(\d+[a-z]?\.)(?=[A-Z])",
+                    r'<b class="ssl-num">\1</b> ', visible)
                 original_plain = html.unescape(
                     re.sub(r"<[^>]+>", "", text)).strip()
                 visible, chem_changed = chem_format(visible)

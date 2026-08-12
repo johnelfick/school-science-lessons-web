@@ -144,7 +144,26 @@ def sanitize_soup(soup: BeautifulSoup) -> list[str]:
     # between rows): browsers hoist the text out of the table. Rebuild the
     # rows from the text layout.
     for tbl in soup.find_all("table"):
-        if tbl.find("tr") is not None:
+        if tbl.find(["td", "th"]) is not None:
+            continue
+        trs = tbl.find_all("tr")
+        if trs:
+            # <tr> rows exist but cells are bare text lines: wrap each line
+            # in a <td>.
+            rebuilt = False
+            for tr in trs:
+                cells = [ln.strip() for ln in tr.get_text().splitlines()
+                         if ln.strip()]
+                if not cells:
+                    continue
+                tr.clear()
+                for cell in cells:
+                    td = soup.new_tag("td")
+                    td.string = cell
+                    tr.append(td)
+                rebuilt = True
+            if rebuilt:
+                actions.append("rebuilt table rows written without <td> tags")
             continue
         rows_txt = [b for b in re.split(r"\n\s*\n+", tbl.get_text())
                     if b.strip()]
