@@ -291,88 +291,79 @@ def main() -> int:
       "the source files makes both websites better. Click a file name to see "
       "its items.</p>")
     w("")
+    if unreachable:
+        unlinked_body = ["<ul>" + "".join(
+            f"<li><code>{esc(f)}</code></li>" for f in unreachable) + "</ul>"]
+    else:
+        unlinked_body = ["<p><em>None found.</em></p>"]
+
+    # One list drives BOTH the summary table and the sections, so their
+    # titles, order and counts always match; the table links to each section.
+    sections_def = [
+        ("Typing mistakes in links", n_typos,
+         "<p>Small slips — a doubled <code>##</code>, a full stop at the end, "
+         "a missing <code>.html</code>. Each one comes with the exact "
+         "replacement.</p>",
+         file_groups(typos, "None found — well done!")),
+        ("Links to sections that moved", n_moved,
+         "<p>These links point at a file that no longer contains that "
+         "section — the section now lives in a different file. Each item "
+         "says where it went and what the link should say instead.</p>",
+         file_groups(moved, "None found.")),
+        ("Links to sections that no longer exist", n_gone,
+         "<p>The section these links point to could not be found in any "
+         "file — it was probably renamed or renumbered at some point. On the "
+         "website these links still open the right page, but land at the top "
+         "instead of the section.</p>",
+         file_groups(gone, "None found.")),
+        ("Links to section names used in several files", n_amb, None,
+         file_groups(ambiguous, "None found.")),
+        ("HTML problems", n_html,
+         "<p>Missing closing tags and mistyped tags. These can make text "
+         "after them display incorrectly.</p>",
+         file_groups(html_problems, "None found.")),
+        ("Duplicated section names", len(dup_groups), None,
+         file_groups(dup_groups, "None found.")),
+        ("Sections sitting away from their group",
+         sum(len(v) for v in displaced.values()),
+         "<p>These sections belong to a numbered group (according to the "
+         "contents list of that group), but their text is located somewhere "
+         "else in the file, past other sections. The graphical website "
+         "re-orders them automatically; moving the text in the source file "
+         "puts both websites right.</p>",
+         file_groups(displaced, "None found.")),
+        ("Suggested renumbering", sum(len(v) for v in renumber.values()),
+         "<p>These groups list sections whose numbers come from a different "
+         "family (for example 9.9.1 listed under 9.9.9.0 Stems). The website "
+         "shows them in the right place regardless, so there is no urgency — "
+         "but consistent numbering makes the files easier to maintain. These "
+         "need judgment: some entries may be deliberate cross-references, "
+         "and sometimes it is the group's own number that is wrong.</p>",
+         file_groups(renumber, "None found.")),
+        ("Other link problems", n_other,
+         "<p>Links with an empty address, or pointing at a file that does "
+         "not exist.</p>",
+         file_groups(other, "None found.")),
+        ("Files no longer linked from the website", len(unreachable),
+         "<p>No page links to these files any more, so visitors cannot "
+         "reach them. They are probably old copies. If they are not needed, "
+         "they can be deleted; if they are needed, a link to them should be "
+         "added somewhere.</p>",
+         unlinked_body),
+    ]
+
     w("| Kind of problem | How many |")
     w("|---|---|")
-    w(f"| Typing mistakes in links (fix suggested) | {n_typos} |")
-    w(f"| Links to sections that moved (fix suggested) | {n_moved} |")
-    w(f"| Links to sections that no longer exist | {n_gone} |")
-    w(f"| Links to section names used in several files | {n_amb} |")
-    w(f"| HTML problems (missing closing tags, etc.) | {n_html} |")
-    w(f"| Files with duplicated section names | {len(dup_groups)} |")
-    w(f"| Sections sitting away from their group | {sum(len(v) for v in displaced.values())} |")
-    w(f"| Groups with sections numbered from another family | {sum(len(v) for v in renumber.values())} |")
-    w(f"| Files no longer linked from the website | {len(unreachable)} |")
-    if n_other:
-        w(f"| Other link problems | {n_other} |")
+    for i, (title, count, _intro, _body) in enumerate(sections_def, 1):
+        w(f"| [{i}. {title}](#sec-{i}) | {count} |")
     w("")
-
-    w("## 1. Typing mistakes in links")
-    w("")
-    w("<p>Small slips — a doubled <code>##</code>, a full stop at the end, a "
-      "missing <code>.html</code>. Each one comes with the exact replacement.</p>")
-    out.extend(file_groups(typos, "None found — well done!"))
-    w("")
-    w("## 2. Links to sections that moved")
-    w("")
-    w("<p>These links point at a file that no longer contains that section — "
-      "the section now lives in a different file. Each item says where it "
-      "went and what the link should say instead.</p>")
-    out.extend(file_groups(moved, "None found."))
-    w("")
-    w("## 3. Links to sections that no longer exist")
-    w("")
-    w("<p>The section these links point to could not be found in any file — "
-      "it was probably renamed or renumbered at some point. On the website "
-      "these links still open the right page, but land at the top instead of "
-      "the section.</p>")
-    out.extend(file_groups(gone, "None found."))
-    w("")
-    w("## 4. Links to section names used in several files")
-    w("")
-    out.extend(file_groups(ambiguous, "None found."))
-    w("")
-    w("## 5. HTML problems")
-    w("")
-    w("<p>Missing closing tags and mistyped tags. These can make text after "
-      "them display incorrectly.</p>")
-    out.extend(file_groups(html_problems, "None found."))
-    w("")
-    w("## 6. Duplicated section names")
-    w("")
-    out.extend(file_groups(dup_groups, "None found."))
-    w("")
-    w("## 7. Sections sitting away from their group")
-    w("")
-    w("<p>These sections belong to a numbered group (according to the "
-      "contents list of that group), but their text is located somewhere "
-      "else in the file, past other sections. The graphical website "
-      "re-orders them automatically; moving the text in the source file "
-      "puts both websites right.</p>")
-    out.extend(file_groups(displaced, "None found."))
-    w("")
-    w("## 8. Suggested renumbering")
-    w("")
-    w("<p>These groups list sections whose numbers come from a different "
-      "family (for example 9.9.1 listed under 9.9.9.0 Stems). The website "
-      "shows them in the right place regardless, so there is no urgency — "
-      "but consistent numbering makes the files easier to maintain. These "
-      "need judgment: some entries may be deliberate cross-references, and "
-      "sometimes it is the group's own number that is wrong.</p>")
-    out.extend(file_groups(renumber, "None found."))
-    w("")
-    w("## 9. Files no longer linked from the website")
-    w("")
-    w("<p>No page links to these files any more, so visitors cannot reach "
-      "them. They are probably old copies. If they are not needed, they can "
-      "be deleted; if they are needed, a link to them should be added "
-      "somewhere.</p>")
-    if unreachable:
-        w("<ul>")
-        out.extend(f"<li><code>{esc(f)}</code></li>" for f in unreachable)
-        w("</ul>")
-    else:
-        w("<p><em>None found.</em></p>")
-    w("")
+    for i, (title, count, intro, body) in enumerate(sections_def, 1):
+        w(f"## {i}. {title} {{#sec-{i}}}")
+        w("")
+        if intro:
+            w(intro)
+        out.extend(body)
+        w("")
 
     dest = Path(args.docs) / "fixes.md"
     dest.write_text("\n".join(out), encoding="utf-8")
