@@ -279,12 +279,26 @@ class Emitter:
                 f"<thead><tr>{head}</tr></thead><tbody>{body}</tbody>"
                 f"</table></div>")
 
+        def is_bullet(ln: str) -> bool:
+            return self.IMG not in ln and bool(re.match(r"^\*\s+\S", ln))
+
         def flush():
             lns = [ln.strip() for ln in "".join(parts).split(self.BR)
                    if ln.strip()]
             parts.clear()
             i = 0
             while i < len(lns):
+                if is_bullet(lns[i]):
+                    run = []
+                    while i < len(lns) and is_bullet(lns[i]):
+                        run.append(re.sub(r"^\*\s+", "", lns[i]))
+                        i += 1
+                    if len(run) >= 2:
+                        chunks.append("<ul>" + "".join(
+                            f"<li>{item}</li>" for item in run) + "</ul>")
+                    else:
+                        emit_line("* " + run[0])
+                    continue
                 is_tabby = lns[i].count("\t") >= 2 and self.IMG not in lns[i]
                 if is_tabby:
                     run = []
