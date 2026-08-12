@@ -106,6 +106,33 @@
 /* Images anywhere in content shrink to fit rather than overflow */
 .md-typeset img { max-width: 100%; height: auto; }
 
+/* Links in running text are underlined (accessibility: never rely on
+   colour alone). Navigation, cards, ToC etc. stay underline-free. */
+.md-typeset p a,
+.md-typeset li a,
+.md-typeset td a,
+.md-typeset th a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: rgba(20, 97, 78, 0.45);
+}
+.md-typeset p a:hover,
+.md-typeset li a:hover,
+.md-typeset td a:hover,
+.md-typeset th a:hover {
+  text-decoration-color: currentColor;
+}
+[data-md-color-scheme="slate"] .md-typeset p a,
+[data-md-color-scheme="slate"] .md-typeset li a,
+[data-md-color-scheme="slate"] .md-typeset td a,
+[data-md-color-scheme="slate"] .md-typeset th a {
+  text-decoration-color: rgba(127, 196, 174, 0.5);
+}
+/* ...but not the tiny "source" popups' neighbours or figure image links */
+.md-typeset .ssl-figure a,
+.md-typeset .ssl-src { text-decoration: none; }
+
 /* Leading enumeration markers ("1.", "2a.", "(a)") in body lines */
 .md-typeset b.ssl-num {
   font-size: 1.12em;
