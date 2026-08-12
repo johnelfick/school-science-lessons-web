@@ -16,6 +16,7 @@ import datetime
 import html
 import posixpath
 import sys
+from urllib.parse import unquote
 from collections import defaultdict
 from pathlib import Path
 
@@ -51,15 +52,30 @@ def file_groups(items: dict[str, list[str]], empty_text: str) -> list[str]:
     return out
 
 
-def find_displaced_sections(repo: Path, pages) -> dict[str, list[str]]:
-    """Sections whose text sits far from their group in the file.
+def find_displaced_sections(repo: Path, pages, all_links=None):
+    """Structural analysis: displaced sections and renumbering suggestions.
 
     Uses the same claim logic as emit.py's section tree: a contents-list
     block claims the sections it links to. A claimed child is 'displaced'
     when another top-level section lies between its group and its text
-    (e.g. Foodgardens1: 10.1-10.5 located after 12.0).
+    (e.g. Foodgardens1: 10.1-10.5 located after 12.0). A child whose
+    number does not extend its group's number gets a renumbering
+    suggestion (e.g. 9.9.1 listed under 9.9.9.0 Stems).
     """
+    import re as _re
     from bs4 import BeautifulSoup
+    from collections import defaultdict as _dd
+    refs = _dd(int)
+    for src, href, _t in (all_links or []):
+        if T.is_external(href):
+            continue
+        if href.startswith("#"):
+            refs[(src, unquote(href[1:]))] += 1
+        else:
+            tgt, frag = T.resolve_href(src, href)
+            if tgt and frag:
+                refs[(tgt, unquote(frag))] += 1
+    renumber: dict[str, list[str]] = {}
     out: dict[str, list[str]] = {}
     for rel, page in pages.items():
         if len(page.sections) < 3:
@@ -82,6 +98,7 @@ def find_displaced_sections(repo: Path, pages) -> dict[str, list[str]]:
             if s.number:
                 num_to.setdefault(s.number + "H", s)
         parent = {}
+        kids: dict[int, list] = {}
         for s in secs:
             if s.kind != "contents-list" or s.block_index >= len(blocks):
                 continue
@@ -90,6 +107,30 @@ def find_displaced_sections(repo: Path, pages) -> dict[str, list[str]]:
                 if child is None or child is s or child.block_index in parent:
                     continue
                 parent[child.block_index] = s
+                kids.setdefault(s.block_index, []).append(child)
+
+        # renumbering suggestions: children whose number is from another family
+        for s in secs:
+            if not s.number or s.block_index not in kids:
+                continue
+            prefix = _re.sub(r"\.0$", "", s.number) + "."
+            wrong = [c for c in kids[s.block_index]
+                     if c.number and not (c.number + ".").startswith(prefix)]
+            if not wrong:
+                continue
+            gname = f"{s.number} {s.title}".strip()
+            nums = ", ".join(c.number for c in wrong[:10]) \
+                + (" …" if len(wrong) > 10 else "")
+            n_refs = sum(refs.get((rel, c.anchor), 0) for c in wrong if c.anchor)
+            renumber.setdefault(rel, []).append(
+                f"The group <b>{esc(gname)}</b> lists sections numbered "
+                f"{esc(nums)}, which do not match the group's own number. "
+                f"If they belong here, renumbering them {esc(prefix)}1, "
+                f"{esc(prefix)}2, … makes the numbering consistent — but "
+                f"then the {n_refs} link(s) pointing at them must be "
+                f"updated too. If they are only cross-references to other "
+                f"groups, or the group's own number is the wrong one, a "
+                f"different fix applies. Please judge case by case.")
         roots = [s for s in secs if s.block_index not in parent]
         by_group: dict[int, tuple] = {}
         for s in secs:
@@ -104,19 +145,19 @@ def find_displaced_sections(repo: Path, pages) -> dict[str, list[str]]:
                        if lo < r.block_index < hi and r is not g
                        and r.kind == "content"]
             if between:
-                gname, kids, seps = by_group.setdefault(
+                gname, gkids, seps = by_group.setdefault(
                     g.block_index,
                     (f"{g.number or ''} {g.title}".strip(), [], set()))
-                kids.append(s.number or s.title)
+                gkids.append(s.number or s.title)
                 seps.add(f"{between[0].number or ''} {between[0].title}".strip())
-        for gname, kids, seps in by_group.values():
-            shown = ", ".join(kids[:8]) + (" …" if len(kids) > 8 else "")
+        for gname, gkids, seps in by_group.values():
+            shown = ", ".join(gkids[:8]) + (" …" if len(gkids) > 8 else "")
             out.setdefault(rel, []).append(
                 f"The sections of <b>{esc(gname)}</b> ({esc(shown)}) have "
                 f"their text located beyond <b>{esc(sorted(seps)[0])}</b>. "
                 f"Moving them next to their group makes the page easier "
                 f"to follow.")
-    return out
+    return out, renumber
 
 
 def main() -> int:
@@ -130,7 +171,7 @@ def main() -> int:
     issues, _stats = T.validate_links(pages, all_links, disk_files, lower_map, repo)
     dupes = T.find_duplicate_anchors(repo, pages, "lxml")
     unreachable = sorted(disk_html - set(pages))
-    displaced = find_displaced_sections(repo, pages)
+    displaced, renumber = find_displaced_sections(repo, pages, all_links)
 
     anchor_owners: dict[str, set[str]] = defaultdict(set)
     for p in pages.values():
@@ -259,6 +300,7 @@ def main() -> int:
     w(f"| HTML problems (missing closing tags, etc.) | {n_html} |")
     w(f"| Files with duplicated section names | {len(dup_groups)} |")
     w(f"| Sections sitting away from their group | {sum(len(v) for v in displaced.values())} |")
+    w(f"| Groups with sections numbered from another family | {sum(len(v) for v in renumber.values())} |")
     w(f"| Files no longer linked from the website | {len(unreachable)} |")
     if n_other:
         w(f"| Other link problems | {n_other} |")
@@ -308,7 +350,17 @@ def main() -> int:
       "puts both websites right.</p>")
     out.extend(file_groups(displaced, "None found."))
     w("")
-    w("## 8. Files no longer linked from the website")
+    w("## 8. Suggested renumbering")
+    w("")
+    w("<p>These groups list sections whose numbers come from a different "
+      "family (for example 9.9.1 listed under 9.9.9.0 Stems). The website "
+      "shows them in the right place regardless, so there is no urgency — "
+      "but consistent numbering makes the files easier to maintain. These "
+      "need judgment: some entries may be deliberate cross-references, and "
+      "sometimes it is the group's own number that is wrong.</p>")
+    out.extend(file_groups(renumber, "None found."))
+    w("")
+    w("## 9. Files no longer linked from the website")
     w("")
     w("<p>No page links to these files any more, so visitors cannot reach "
       "them. They are probably old copies. If they are not needed, they can "
