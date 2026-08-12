@@ -115,6 +115,10 @@ def sanitize_soup(soup: BeautifulSoup) -> list[str]:
         if el.name not in KNOWN_TAGS:
             actions.append(f"unwrapped unknown tag <{el.name}>")
             el.unwrap()
+    # <font> is styling we discard anyway, and unclosed <font> tags swallow
+    # block content (tables) into inline context — remove the wrappers.
+    for el in soup.find_all("font"):
+        el.unwrap()
     for a in soup.find_all("a", href=True):
         if a.find(["br", "hr", "a"]) is None:
             continue
