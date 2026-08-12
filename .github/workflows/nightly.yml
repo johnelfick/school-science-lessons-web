@@ -57,6 +57,7 @@ jobs:
         run: |
           python build/transform.py --source .source --out report
           python build/emit.py --source .source --docs docs --all
+          python build/fixes_page.py --source .source --docs docs
 
       - name: Build site
         if: steps.changes.outputs.changed == 'true'

@@ -30,10 +30,16 @@ python build/transform.py --source .source --out report
 
 ```
 python build/emit.py --source .source --docs docs --all   # all pages + nav
+python build/fixes_page.py --source .source --docs docs   # editor's corrections page
 python -m mkdocs build                                     # -> site/
 python build/trim_search.py                                # shrink search index
 python build/check_links.py                                # verify built links
 ```
+
+The corrections page (published at /fixes/) is a plain-language list of
+every problem found in the source files — broken links with suggested
+replacements, missing closing tags, unused files — regenerated nightly so
+the editor can gradually fix the source at their own pace.
 
 ## Nightly build (GitHub Actions)
 
