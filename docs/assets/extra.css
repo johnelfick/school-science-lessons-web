@@ -47,6 +47,20 @@
   }
 }
 
+/* ---- Left sidebar: make the current page unmistakable ---------------- */
+
+.md-nav .md-nav__link--active,
+.md-nav .md-nav__link--active code {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 2px;
+  color: var(--md-primary-fg-color);
+}
+[data-md-color-scheme="slate"] .md-nav .md-nav__link--active {
+  color: #7fc4ae;
+}
+
 /* ---- Figures (John's diagrams, inlined) ----------------------------- */
 
 .ssl-figure {

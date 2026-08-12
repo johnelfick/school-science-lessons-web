@@ -287,6 +287,7 @@ nav:
     - "Alkaloids, Ibogaine to Zizyphine": appendices/appendixH.md
   # --- END GENERATED NAV ---
   - About:
+      - Dr John Elfick: about-john.md
       - Websites: websites.md
       - Greek alphabet: GreekAlphabet.md
       - Corrections list: fixes.md
