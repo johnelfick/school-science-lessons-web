@@ -39,6 +39,10 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
     <div class="ssl-card-img"><img src="assets/cards/agriculture-john.jpg" alt="" style="object-position: 50% 60%"></div>
     <div class="ssl-card-body"><b>Agriculture</b><span>Food gardens, crops and school projects</span></div>
   </a>
+  <a class="ssl-card" href="biology/UNBiology2/">
+    <div class="ssl-card-img"><img src="assets/cards/physiology-john.jpg" alt="" style="object-position: 50% 70%"></div>
+    <div class="ssl-card-body"><b>Human physiology &amp; health</b><span>The human body, health and safety</span></div>
+  </a>
   <a class="ssl-card" href="physics/UNPh35/">
     <div class="ssl-card-img"><img src="assets/cards/geology-john.jpg" alt="" style="object-position: 50% 75%"></div>
     <div class="ssl-card-body"><b>Geology &amp; Earth science</b><span>Rocks, minerals and the story of the Earth</span></div>
@@ -46,10 +50,6 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
   <a class="ssl-card" href="physics/UNPh36/">
     <div class="ssl-card-img"><img src="assets/cards/astronomy-john.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Astronomy</b><span>The sky, the solar system and beyond</span></div>
-  </a>
-  <a class="ssl-card" href="biology/UNBiology2/">
-    <div class="ssl-card-img"><img src="assets/cards/physiology-john.jpg" alt="" style="object-position: 50% 70%"></div>
-    <div class="ssl-card-body"><b>Human physiology &amp; health</b><span>The human body, health and safety</span></div>
   </a>
   <a class="ssl-card" href="physics/UNPh37/">
     <div class="ssl-card-img"><img src="assets/cards/weather-john.jpg" alt="" style="object-position: 50% 80%"></div>
