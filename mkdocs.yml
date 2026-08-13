@@ -60,20 +60,85 @@ nav:
   - Home: index.md
   # --- BEGIN GENERATED NAV (written by build/emit.py --all) ---
   - Chemistry:
-    - "Heat substances": chemistry/UNChem1.md
-    - "Carbon dioxide": chemistry/UNChem1a.md
-    - "Ammonia": chemistry/UNChem1b.md
-    - "Sulfur dioxide": chemistry/UNChem2a.md
-    - "Fats in food": chemistry/UNChem2b.md
-    - "Acid-base indicators": chemistry/UNChemAcidBase.md
-    - "Images of Atoms": chemistry/UNChemImage.md
-    - "Ligands": chemistry/UNChemLigand.md
-    - "Mercury": chemistry/UNChemMercury1.md
-    - "Prepare chemicals": chemistry/UNChemPrepare.md
-    - "Periodic Table": chemistry/UNChemTable1.md
-    - "Terms in the Table of the Elements": chemistry/UNChemTable2.md
-    - "Chemistry terminology": chemistry/UNChemTable.md
-    - "Chemistry Tests": chemistry/UNChemTests.md
+    - Basics:
+      - "Heat substances": chemistry/UNChem1.md
+      - "Carbon dioxide": chemistry/UNChem1a.md
+      - "Ammonia": chemistry/UNChem1b.md
+      - "Sulfur dioxide": chemistry/UNChem2a.md
+      - "Fats in food": chemistry/UNChem2b.md
+      - "Acid-base indicators": chemistry/UNChemAcidBase.md
+      - "Images of Atoms": chemistry/UNChemImage.md
+      - "Ligands": chemistry/UNChemLigand.md
+      - "Mercury": chemistry/UNChemMercury1.md
+      - "Prepare chemicals": chemistry/UNChemPrepare.md
+      - "Periodic Table": chemistry/UNChemTable1.md
+      - "Terms in the Table of the Elements": chemistry/UNChemTable2.md
+      - "Chemistry terminology": chemistry/UNChemTable.md
+      - "Chemistry Tests": chemistry/UNChemTests.md
+    - Topics:
+      - "Science, Maths and Technology": topics/topic01.md
+      - "Laboratory Safety": topics/topic03.md
+      - "Hazzards": topics/topic04.md
+      - "Solutions": topics/topic05.md
+      - "International System of Units": topics/topic06a.md
+      - "Study the elements": topics/topic07.md
+      - "Colloids and crystalloids": topics/topic07a.md
+      - "Chemical changes": topics/topic07b.md
+      - "Heat sources": topics/topic08.md
+      - "Crystals and polymers": topics/topic09.md
+      - "Separation": topics/topic10.md
+      - "Brownian motion": topics/topic11.md
+      - "Acids": topics/topic12.md
+      - "Chemical reactions": topics/topic12A.md
+      - "Chemistry of metals": topics/topic12B.md
+      - "Chemistry of halogens": topics/topic12C.md
+      - "Chemistry of alkalis": topics/topic12D.md
+      - "Acid-base neutralization": topics/topic12E.md
+      - "Chemistry of sulfur": topics/topic12F.md
+      - "Prepare gases": topics/topic13.md
+      - "Heat of reactions": topics/topic14.md
+      - "Oxidation": topics/topic15.md
+      - "Electrolysis and Electroplating": topics/topic15a.md
+      - "Organic chemistry": topics/topic16.md
+      - "Aliphatic and Aromatic Compounds": topics/topic16a.md
+      - "Organic chemistry, Amines to Proteins": topics/topic16b.md
+      - "Plant Oils": topics/topic16c.md
+      - "Dairy products": topics/topic16d.md
+      - "Phytochemicals": topics/topic16e.md
+      - "Phytochemicals, Araloside toTangshenoside": topics/topic16g.md
+      - "Rates of reaction": topics/topic17.md
+      - "Chemistry of the Environment": topics/topic18.md
+      - "Chemistry of swimming pools": topics/topic18a.md
+      - "Chemistry of food": topics/topic19.md
+      - "Food Additives and Food Preservation": topics/topic19a.md
+      - "Chemicals in the home": topics/topic19b.md
+      - "Chemical index A–Z":
+        - "Chemistry, Aa to Ac": topics/topicIndexAaAc.md
+        - "Chemistry Experiments, Ad to Az": topics/topicIndexAd-Az.md
+        - "Chemistry Experiments, B": topics/topicIndexB.md
+        - "Chemistry Experiments, Ca to Ch": topics/topicIndexCaCh.md
+        - "Chemistry Experiments, Calcium": topics/topicIndexCalcium.md
+        - "Chemistry Experiments, Carbon": topics/topicIndexCarbon.md
+        - "Chemistry Experiments, Ci to Cy": topics/topicIndexCiCy.md
+        - "Chemistry Experiments, D": topics/topicIndexD.md
+        - "Chemistry Experiments, E": topics/topicIndexE.md
+        - "Chemistry Experiments, F": topics/topicIndexF.md
+        - "Chemistry Experiments, G": topics/topicIndexG.md
+        - "Chemistry Experiments, H": topics/topicIndexH.md
+        - "Chemistry Experiments, I, J, K": topics/topicIndexIJK.md
+        - "Chemistry Experiments, L": topics/topicIndexL.md
+        - "Chemistry Experiments, M": topics/topicIndexM.md
+        - "Chemistry Experiments, Mg, Mn": topics/topicIndexMg.md
+        - "Chemistry Experiments, N": topics/topicIndexN.md
+        - "Chemistry Experiments, O": topics/topicIndexO.md
+        - "Chemistry Experiments, P": topics/topicIndexP.md
+        - "Chemistry Experiments, Potasium": topics/topicIndexPotassium.md
+        - "Chemistry Experiments, Q, R": topics/topicIndexQR.md
+        - "Chemistry Experiments, S": topics/topicIndexS.md
+        - "Chemistry Experiments, Sodium": topics/topicIndexSodium.md
+        - "Chemistry Experiments, T": topics/topicIndexT.md
+        - "Chemistry Experiments, U, V, W": topics/topicIndexUVW.md
+        - "Chemistry Experiments, X, Y, Z": topics/topicIndexXYZ.md
   - Physics:
     - "Measurement": physics/UNPh05.md
     - "Laboratory equipment": physics/UNPh06.md
@@ -217,70 +282,6 @@ nav:
       - "Equipment for science curriculum": projects/ProjStequ1.md
       - "Taro Project": projects/ProjTaro.md
       - "Yam Project": projects/ProjYam.md
-  - Topics:
-    - "Science, Maths and Technology": topics/topic01.md
-    - "Laboratory Safety": topics/topic03.md
-    - "Hazzards": topics/topic04.md
-    - "Solutions": topics/topic05.md
-    - "International System of Units": topics/topic06a.md
-    - "Study the elements": topics/topic07.md
-    - "Colloids and crystalloids": topics/topic07a.md
-    - "Chemical changes": topics/topic07b.md
-    - "Heat sources": topics/topic08.md
-    - "Crystals and polymers": topics/topic09.md
-    - "Separation": topics/topic10.md
-    - "Brownian motion": topics/topic11.md
-    - "Acids": topics/topic12.md
-    - "Chemical reactions": topics/topic12A.md
-    - "Chemistry of metals": topics/topic12B.md
-    - "Chemistry of halogens": topics/topic12C.md
-    - "Chemistry of alkalis": topics/topic12D.md
-    - "Acid-base neutralization": topics/topic12E.md
-    - "Chemistry of sulfur": topics/topic12F.md
-    - "Prepare gases": topics/topic13.md
-    - "Heat of reactions": topics/topic14.md
-    - "Oxidation": topics/topic15.md
-    - "Electrolysis and Electroplating": topics/topic15a.md
-    - "Organic chemistry": topics/topic16.md
-    - "Aliphatic and Aromatic Compounds": topics/topic16a.md
-    - "Organic chemistry, Amines to Proteins": topics/topic16b.md
-    - "Plant Oils": topics/topic16c.md
-    - "Dairy products": topics/topic16d.md
-    - "Phytochemicals": topics/topic16e.md
-    - "Phytochemicals, Araloside toTangshenoside": topics/topic16g.md
-    - "Rates of reaction": topics/topic17.md
-    - "Chemistry of the Environment": topics/topic18.md
-    - "Chemistry of swimming pools": topics/topic18a.md
-    - "Chemistry of food": topics/topic19.md
-    - "Food Additives and Food Preservation": topics/topic19a.md
-    - "Chemicals in the home": topics/topic19b.md
-    - "Chemical index A–Z":
-      - "Chemistry, Aa to Ac": topics/topicIndexAaAc.md
-      - "Chemistry Experiments, Ad to Az": topics/topicIndexAd-Az.md
-      - "Chemistry Experiments, B": topics/topicIndexB.md
-      - "Chemistry Experiments, Ca to Ch": topics/topicIndexCaCh.md
-      - "Chemistry Experiments, Calcium": topics/topicIndexCalcium.md
-      - "Chemistry Experiments, Carbon": topics/topicIndexCarbon.md
-      - "Chemistry Experiments, Ci to Cy": topics/topicIndexCiCy.md
-      - "Chemistry Experiments, D": topics/topicIndexD.md
-      - "Chemistry Experiments, E": topics/topicIndexE.md
-      - "Chemistry Experiments, F": topics/topicIndexF.md
-      - "Chemistry Experiments, G": topics/topicIndexG.md
-      - "Chemistry Experiments, H": topics/topicIndexH.md
-      - "Chemistry Experiments, I, J, K": topics/topicIndexIJK.md
-      - "Chemistry Experiments, L": topics/topicIndexL.md
-      - "Chemistry Experiments, M": topics/topicIndexM.md
-      - "Chemistry Experiments, Mg, Mn": topics/topicIndexMg.md
-      - "Chemistry Experiments, N": topics/topicIndexN.md
-      - "Chemistry Experiments, O": topics/topicIndexO.md
-      - "Chemistry Experiments, P": topics/topicIndexP.md
-      - "Chemistry Experiments, Potasium": topics/topicIndexPotassium.md
-      - "Chemistry Experiments, Q, R": topics/topicIndexQR.md
-      - "Chemistry Experiments, S": topics/topicIndexS.md
-      - "Chemistry Experiments, Sodium": topics/topicIndexSodium.md
-      - "Chemistry Experiments, T": topics/topicIndexT.md
-      - "Chemistry Experiments, U, V, W": topics/topicIndexUVW.md
-      - "Chemistry Experiments, X, Y, Z": topics/topicIndexXYZ.md
   - Appendices:
     - "Appendix A, Amines and Alkaloids": appendices/appendixA.md
     - "Appendix B, Biology preparations": appendices/appendixB.md

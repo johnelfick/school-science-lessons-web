@@ -680,13 +680,14 @@ NAV_BEGIN = "# --- BEGIN GENERATED NAV (written by build/emit.py --all) ---"
 NAV_END = "# --- END GENERATED NAV ---"
 
 NAV_TABS = [
-    ("Chemistry", [("chemistry", None)]),
+    # "Topics" is John's larger chemistry section; both folders live under
+    # one Chemistry tab as subgroups (agreed with John, 2026-08-13).
+    ("Chemistry", [("chemistry", "Basics"), ("topics", "Topics")]),
     ("Physics", [("physics", None)]),
     ("Biology", [("biology", None)]),
     ("Primary science", [("primary", None)]),
     ("Agriculture", [("foodgardens", "Food gardens"), ("soils", "Soils"),
                      ("projects", "School projects")]),
-    ("Topics", [("topics", None)]),
     ("Appendices", [("appendices", None)]),
 ]
 
