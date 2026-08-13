@@ -19,4 +19,8 @@ and is free to download for educational purposes.
 [https://johnelfick.github.io/school-science-lessons-web/](https://johnelfick.github.io/school-science-lessons-web/)
 
 The graphical website (this site) is generated automatically from the
-HTML website, and refreshes shortly after any change there.
+HTML website, and refreshes shortly after any change there. If anything
+looks wrong here, every page links back to its original version — via
+the "Last updated" line at the top and a note at the bottom of each
+page. Some imagery on the home page is historic public-domain artwork —
+see [image credits](credits.md).
