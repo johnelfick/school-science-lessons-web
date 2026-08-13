@@ -42,6 +42,9 @@ theme:
 extra_css:
   - assets/extra.css
 
+extra_javascript:
+  - assets/extra.js
+
 markdown_extensions:
   - attr_list
   - md_in_html
@@ -294,5 +297,5 @@ nav:
       - Websites: websites.md
       - Greek alphabet: GreekAlphabet.md
       - Corrections list: fixes.md
-      - Visitor statistics: https://johnelfick.goatcounter.com/
       - Image credits: credits.md
+      - Visitor statistics: https://johnelfick.goatcounter.com/
