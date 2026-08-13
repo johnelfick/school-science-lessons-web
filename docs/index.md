@@ -120,6 +120,5 @@ day. The most recently revised pages:</p>
      title="Open the visitor statistics dashboard">
     <img src="https://johnelfick.goatcounter.com/counter/TOTAL.svg"
          alt="Total visits" loading="lazy">
-    Visitor statistics
   </a>
 </p>
