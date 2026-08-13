@@ -12,6 +12,10 @@ and is free to download for educational purposes.
 <br>[School of Education, University of Queensland](https://education.uq.edu.au/)
 <br>Please send comments to: [j.elfick@uq.edu.au](mailto:j.elfick@uq.edu.au)
 
+Experiments described in these lessons are for use by teachers in
+properly supervised settings — please read the
+[safety notice](safety.md).
+
 **HTML website:**
 <a href="https://johnelfick.github.io/school-science-lessons/" target="_blank" rel="noopener">https://johnelfick.github.io/school-science-lessons/</a>
 
