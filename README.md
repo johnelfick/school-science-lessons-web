@@ -9,6 +9,9 @@ automatically from the
 The source repository is treated as read-only: the original site and its
 editing workflow are never modified.
 
+Code in this repository is MIT-licensed (see LICENSE); the lesson content
+remains © Dr John Elfick, free to use for educational purposes.
+
 ## Documentation
 
 - [CLAUDE.md](CLAUDE.md) — project guide: architecture, core invariants,
