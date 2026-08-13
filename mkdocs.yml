@@ -112,33 +112,33 @@ nav:
       - "Chemistry of food": topics/topic19.md
       - "Food Additives and Food Preservation": topics/topic19a.md
       - "Chemicals in the home": topics/topic19b.md
-      - "Chemical index A–Z":
-        - "Chemistry, Aa to Ac": topics/topicIndexAaAc.md
-        - "Chemistry Experiments, Ad to Az": topics/topicIndexAd-Az.md
-        - "Chemistry Experiments, B": topics/topicIndexB.md
-        - "Chemistry Experiments, Ca to Ch": topics/topicIndexCaCh.md
-        - "Chemistry Experiments, Calcium": topics/topicIndexCalcium.md
-        - "Chemistry Experiments, Carbon": topics/topicIndexCarbon.md
-        - "Chemistry Experiments, Ci to Cy": topics/topicIndexCiCy.md
-        - "Chemistry Experiments, D": topics/topicIndexD.md
-        - "Chemistry Experiments, E": topics/topicIndexE.md
-        - "Chemistry Experiments, F": topics/topicIndexF.md
-        - "Chemistry Experiments, G": topics/topicIndexG.md
-        - "Chemistry Experiments, H": topics/topicIndexH.md
-        - "Chemistry Experiments, I, J, K": topics/topicIndexIJK.md
-        - "Chemistry Experiments, L": topics/topicIndexL.md
-        - "Chemistry Experiments, M": topics/topicIndexM.md
-        - "Chemistry Experiments, Mg, Mn": topics/topicIndexMg.md
-        - "Chemistry Experiments, N": topics/topicIndexN.md
-        - "Chemistry Experiments, O": topics/topicIndexO.md
-        - "Chemistry Experiments, P": topics/topicIndexP.md
-        - "Chemistry Experiments, Potasium": topics/topicIndexPotassium.md
-        - "Chemistry Experiments, Q, R": topics/topicIndexQR.md
-        - "Chemistry Experiments, S": topics/topicIndexS.md
-        - "Chemistry Experiments, Sodium": topics/topicIndexSodium.md
-        - "Chemistry Experiments, T": topics/topicIndexT.md
-        - "Chemistry Experiments, U, V, W": topics/topicIndexUVW.md
-        - "Chemistry Experiments, X, Y, Z": topics/topicIndexXYZ.md
+    - "Chemical index A–Z":
+      - "Chemistry, Aa to Ac": topics/topicIndexAaAc.md
+      - "Chemistry Experiments, Ad to Az": topics/topicIndexAd-Az.md
+      - "Chemistry Experiments, B": topics/topicIndexB.md
+      - "Chemistry Experiments, Ca to Ch": topics/topicIndexCaCh.md
+      - "Chemistry Experiments, Calcium": topics/topicIndexCalcium.md
+      - "Chemistry Experiments, Carbon": topics/topicIndexCarbon.md
+      - "Chemistry Experiments, Ci to Cy": topics/topicIndexCiCy.md
+      - "Chemistry Experiments, D": topics/topicIndexD.md
+      - "Chemistry Experiments, E": topics/topicIndexE.md
+      - "Chemistry Experiments, F": topics/topicIndexF.md
+      - "Chemistry Experiments, G": topics/topicIndexG.md
+      - "Chemistry Experiments, H": topics/topicIndexH.md
+      - "Chemistry Experiments, I, J, K": topics/topicIndexIJK.md
+      - "Chemistry Experiments, L": topics/topicIndexL.md
+      - "Chemistry Experiments, M": topics/topicIndexM.md
+      - "Chemistry Experiments, Mg, Mn": topics/topicIndexMg.md
+      - "Chemistry Experiments, N": topics/topicIndexN.md
+      - "Chemistry Experiments, O": topics/topicIndexO.md
+      - "Chemistry Experiments, P": topics/topicIndexP.md
+      - "Chemistry Experiments, Potasium": topics/topicIndexPotassium.md
+      - "Chemistry Experiments, Q, R": topics/topicIndexQR.md
+      - "Chemistry Experiments, S": topics/topicIndexS.md
+      - "Chemistry Experiments, Sodium": topics/topicIndexSodium.md
+      - "Chemistry Experiments, T": topics/topicIndexT.md
+      - "Chemistry Experiments, U, V, W": topics/topicIndexUVW.md
+      - "Chemistry Experiments, X, Y, Z": topics/topicIndexXYZ.md
   - Physics:
     - "Measurement": physics/UNPh05.md
     - "Laboratory equipment": physics/UNPh06.md

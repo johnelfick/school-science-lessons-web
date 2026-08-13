@@ -725,28 +725,28 @@ def write_nav(mkdocs_yml: Path, titles: dict[str, str]) -> None:
 
     for tab, folders in NAV_TABS:
         add(1, f"- {tab}:")
+        tab_index_pages: list[str] = []
         for folder, sublabel in folders:
             pages = sorted((r for r in titles if r.startswith(folder + "/")),
                            key=natural_key)
             if not pages:
                 continue
-            # Topics: split the A-Z chemical index into its own subgroup
             indent = 2
             if sublabel:
                 add(2, f"- {sublabel}:")
                 indent = 3
+            # the A-Z chemical index becomes its own subgroup of the tab
             main = [r for r in pages
                     if not posixpath.basename(r).startswith("topicIndex")]
-            index_pages = [r for r in pages if r not in main]
+            tab_index_pages += [r for r in pages if r not in main]
             for rel in main:
                 md = posixpath.splitext(rel)[0] + ".md"
                 add(indent, f'- "{nav_label(titles[rel], rel)}": {md}')
-            if index_pages:
-                add(indent, '- "Chemical index A–Z":')
-                for rel in index_pages:
-                    md = posixpath.splitext(rel)[0] + ".md"
-                    add(indent + 1,
-                        f'- "{nav_label(titles[rel], rel)}": {md}')
+        if tab_index_pages:
+            add(2, '- "Chemical index A–Z":')
+            for rel in tab_index_pages:
+                md = posixpath.splitext(rel)[0] + ".md"
+                add(3, f'- "{nav_label(titles[rel], rel)}": {md}')
 
     text = mkdocs_yml.read_text(encoding="utf-8")
     begin = text.index(NAV_BEGIN)
