@@ -234,8 +234,13 @@ class Emitter:
     BR = "\x00"
     IMG = "\x01"
 
-    def render_inline(self, node, source_rel: str) -> str:
-        """Render one inline node to HTML with BR/IMG sentinels."""
+    def render_inline(self, node, source_rel: str, listing: bool = False) -> str:
+        """Render one inline node to HTML with BR/IMG sentinels.
+
+        In listing blocks (mostly link-lines, e.g. the A-Z table pages),
+        image references stay plain links as the author wrote them —
+        an inlined figure would strand awkwardly between the links.
+        """
         if isinstance(node, NavigableString):
             return html.escape(str(node), quote=False)
         if not isinstance(node, Tag):
@@ -244,22 +249,24 @@ class Emitter:
             return self.BR
         if node.name == "a":
             if node.get("name") and not node.get("href"):
-                inner = "".join(self.render_inline(c, source_rel)
+                inner = "".join(self.render_inline(c, source_rel, listing)
                                 for c in node.children)
                 return f'<span id="{html.escape(node["name"])}">{inner}</span>'
             href = node.get("href", "")
-            text = "".join(self.render_inline(c, source_rel)
+            text = "".join(self.render_inline(c, source_rel, listing)
                            for c in node.children)
             target, _ = T.resolve_href(source_rel, href) if not T.is_external(href) \
                 else (None, None)
             if target and posixpath.splitext(target)[1].lower() in T.IMAGE_EXTS:
                 src = self.image_url(source_rel, target)
+                if listing:
+                    return f'<a href="{src}" target="_blank">{text}</a>'
                 return f"{text}{self.IMG}{src}{self.IMG}"
             new_href = self.rewrite_href(source_rel, href)
             external = ' target="_blank" rel="noopener"' if T.is_external(href) else ""
             return f'<a href="{html.escape(new_href)}"{external}>{text}</a>'
         if node.name in INLINE_KEEP:
-            inner = "".join(self.render_inline(c, source_rel)
+            inner = "".join(self.render_inline(c, source_rel, listing)
                             for c in node.children)
             return f"<{node.name}>{inner}</{node.name}>"
         if node.name == "img":
@@ -269,7 +276,7 @@ class Emitter:
                 return f"{self.IMG}{self.image_url(source_rel, target)}{self.IMG}"
             return ""
         # font, span, center, etc: keep children, drop the wrapper
-        return "".join(self.render_inline(c, source_rel)
+        return "".join(self.render_inline(c, source_rel, listing)
                        for c in node.children)
 
     def render_passthrough(self, node: Tag, source_rel: str) -> str:
@@ -304,6 +311,8 @@ class Emitter:
         """
         chunks: list[str] = []
         parts: list[str] = []
+        _t, n_lines, n_link_lines = T.leading_frag_info(nodes)
+        listing = n_link_lines >= 5 and n_lines and n_link_lines / n_lines > 0.5
 
         def emit_line(text: str):
             srcs = re.findall(f"{self.IMG}([^{self.IMG}]*){self.IMG}", text)
@@ -413,7 +422,7 @@ class Emitter:
                 chunks.extend(self.render_block(
                     list(node.children), source_rel, skip_frag_link_lines))
             else:
-                parts.append(self.render_inline(node, source_rel))
+                parts.append(self.render_inline(node, source_rel, listing))
         flush()
         return chunks
 

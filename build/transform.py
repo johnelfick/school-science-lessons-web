@@ -381,7 +381,7 @@ def leading_frag_info(nodes: list) -> tuple[list[str], int]:
     for n in nodes:
         walk(n)
 
-    targets, n_lines = [], 0
+    targets, n_lines, n_link_lines = [], 0, 0
     for toks in lines:
         meaningful = [t for t in toks
                       if not (t[0] == "text"
@@ -390,14 +390,16 @@ def leading_frag_info(nodes: list) -> tuple[list[str], int]:
             continue
         n_lines += 1
         kind, value = meaningful[0]
-        if kind == "link" and value:
-            targets.append(value)
-    return targets, n_lines
+        if kind == "link":
+            n_link_lines += 1
+            if value:
+                targets.append(value)
+    return targets, n_lines, n_link_lines
 
 
 def classify_block(nodes: list, lines: list[str]) -> str:
     """A block where most lines begin with same-page links is a contents list."""
-    targets, n_lines = leading_frag_info(nodes)
+    targets, n_lines, _ = leading_frag_info(nodes)
     if len(targets) >= 3 and n_lines and len(targets) / n_lines > 0.5:
         return "contents-list"
     return "content"

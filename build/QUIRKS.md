@@ -103,7 +103,9 @@ Faithful-but-nicer rendering of John's text conventions:
 
 - **D1. "See diagram" links → inline `<figure>`** with caption. The
   original site has exactly ONE `<img>` tag; all 4,000+ diagrams are
-  bare links.
+  bare links. EXCEPTION: in listing blocks (≥5 lines and >50% of lines
+  beginning with a link, e.g. UNPhysicsTable's A-Z), image references
+  stay plain links — a framed figure looks stranded between link rows.
 - **D2. Tab-separated text tables** (2+ tabs per line, 2+ consecutive
   lines) → real tables; browsers collapse tabs so these are invisible
   as tables otherwise (UNChem1 "Table 7.5.3").
