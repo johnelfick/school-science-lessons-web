@@ -291,6 +291,27 @@ def main() -> int:
       "the source files makes both websites better. Click a file name to see "
       "its items.</p>")
     w("")
+    # canonical-link check: every reachable page should declare its
+    # graphical-edition equivalent (added 2026-08-13; a page saved from an
+    # older copy loses the line)
+    NEW_BASE = "https://johnelfick.github.io/school-science-lessons-web/"
+    import re as _re2
+    canonical_missing: dict[str, list[str]] = {}
+    for rel in pages:
+        raw = T.read_html(repo / rel)
+        expected = NEW_BASE if rel == "index.html" \
+            else NEW_BASE + posixpath.splitext(rel)[0] + "/"
+        m = _re2.search(r'<link rel="canonical" href="([^"]+)"', raw)
+        line = f'&lt;link rel="canonical" href="{expected}"&gt;'
+        if m is None:
+            canonical_missing.setdefault(rel, []).append(
+                f"The canonical line is missing. Add this inside "
+                f"<code>&lt;head&gt;</code>: <code>{line}</code>")
+        elif m.group(1) != expected:
+            canonical_missing.setdefault(rel, []).append(
+                f"The canonical line points to <code>{esc(m.group(1))}</code> "
+                f"but should be <code>{line}</code>")
+
     if unreachable:
         unlinked_body = ["<ul>" + "".join(
             f"<li><code>{esc(f)}</code></li>" for f in unreachable) + "</ul>"]
@@ -344,6 +365,13 @@ def main() -> int:
          "<p>Links with an empty address, or pointing at a file that does "
          "not exist.</p>",
          file_groups(other, "None found.")),
+        ("Pages missing their canonical link",
+         sum(len(v) for v in canonical_missing.values()),
+         "<p>Every page carries one line in its <code>&lt;head&gt;</code> "
+         "telling search engines that the graphical website is the official "
+         "version. A page saved from an older copy can lose it; this list "
+         "shows the exact line to put back.</p>",
+         file_groups(canonical_missing, "None — every page has its line.")),
         ("Files no longer linked from the website", len(unreachable),
          "<p>No page links to these files any more, so visitors cannot "
          "reach them. They are probably old copies. If they are not needed, "
