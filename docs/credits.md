@@ -13,4 +13,4 @@ sources:
 | Image | Source | License |
 |---|---|---|
 | Primary science card — heath fritillary butterfly plate | [Swallowtail Garden Seeds via Flickr](https://www.flickr.com/photos/97123293@N07/16070413094) | Public domain |
-| Laboratory Safety card — scientist wearing safety glasses | [US Department of Energy via rawpixel](https://www.rawpixel.com/image/11072993/photo-image-person-public-domain-woman) | CC0 |
+| Laboratory Safety card — students in a school chemistry lab | AI-generated image via [easy-peasy.ai](https://easy-peasy.ai/) (not a photograph of real people) | AI-generated |
