@@ -12,6 +12,20 @@ and is free to download for educational purposes.
 <br>[School of Education, University of Queensland](https://education.uq.edu.au/)
 <br>Please send comments to: [j.elfick@uq.edu.au](mailto:j.elfick@uq.edu.au)
 
+## About the editor
+
+Dr John Elfick has been an Honorary Research Consultant with the School
+of Education at the University of Queensland since late 1999, following
+a career with UNESCO in international roles across many countries.
+School Science Lessons is his major continuing project, run in
+conjunction with UNESCO.
+
+See his
+<a href="https://education.uq.edu.au/profile/200/john-elfick" target="_blank" rel="noopener">profile at the School of Education</a>,
+and the website's record in
+<a href="https://espace.library.uq.edu.au/view/UQ:329838" target="_blank" rel="noopener">UQ eSpace</a>,
+the University of Queensland's institutional repository.
+
 Experiments described in these lessons are for use by teachers in
 properly supervised settings — please read the
 [safety notice](safety.md).
