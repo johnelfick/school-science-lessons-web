@@ -318,6 +318,79 @@ def main() -> int:
     else:
         unlinked_body = ["<p><em>None found.</em></p>"]
 
+    # ---- unused images: on disk but not referenced by any linked page
+    import hashlib
+    referenced_imgs = set()
+    for src, href, _t in all_links:
+        if T.is_external(href) or href.startswith("#"):
+            continue
+        tgt, _f = T.resolve_href(src, href)
+        if tgt and posixpath.splitext(tgt)[1].lower() in T.IMAGE_EXTS:
+            referenced_imgs.add(tgt)
+    disk_imgs = {f for f in disk_files
+                 if posixpath.splitext(f)[1].lower() in T.IMAGE_EXTS}
+    unused_imgs = disk_imgs - referenced_imgs
+    # images used only by the unlinked files above
+    used_by_unlinked = set()
+    for rel in unreachable:
+        raw = T.read_html(repo / rel)
+        for m in __import__("re").finditer(r"images/([\w.\-]+)", raw):
+            used_by_unlinked.add("images/" + m.group(1))
+    truly_unused = sorted(unused_imgs - used_by_unlinked)
+    tied_to_unlinked = sorted(unused_imgs & used_by_unlinked)
+    img_body = [
+        "<p><b>Before deleting anything:</b> other websites may link "
+        "directly to image files, so a quick check of any file you are "
+        "unsure about is worthwhile.</p>"]
+    if truly_unused:
+        img_body.append(
+            f"<details><summary><b>{len(truly_unused)} images not used "
+            f"anywhere</b></summary><ul>" + "".join(
+                f"<li><code>{esc(f)}</code></li>" for f in truly_unused)
+            + "</ul></details>")
+    if tied_to_unlinked:
+        img_body.append(
+            f"<details><summary><b>{len(tied_to_unlinked)} images used only "
+            f"by the unlinked files listed above</b> (delete together with "
+            f"those files, or keep if the files stay)</summary><ul>" + "".join(
+                f"<li><code>{esc(f)}</code></li>" for f in tied_to_unlinked)
+            + "</ul></details>")
+    if not truly_unused and not tied_to_unlinked:
+        img_body = ["<p><em>None found — every image is in use.</em></p>"]
+
+    # ---- duplicate files: identical content in more than one place
+    def norm_hash(path):
+        raw = (repo / path).read_bytes()
+        return hashlib.md5(b"".join(raw.split())).hexdigest()
+
+    by_hash: dict[str, list[str]] = {}
+    for f in sorted(disk_html | disk_imgs):
+        try:
+            by_hash.setdefault(norm_hash(f), []).append(f)
+        except OSError:
+            continue
+    dup_body = []
+    reachable_set = set(pages)
+    for group in by_hash.values():
+        if len(group) < 2:
+            continue
+        marks = []
+        for f in group:
+            if f in reachable_set or f in referenced_imgs:
+                marks.append(f"<code>{esc(f)}</code> (in use)")
+            else:
+                marks.append(f"<code>{esc(f)}</code> (not linked — "
+                             f"candidate for deletion)")
+        dup_body.append("<li>" + " and ".join(marks)
+                        + " have identical content.</li>")
+    n_dup_groups = len(dup_body)
+    dup_body = (["<p>The same content stored under more than one name or "
+                 "folder. Usually the linked copy should stay and the "
+                 "unlinked one can go; if both are in use, the links should "
+                 "be pointed at one of them first.</p>",
+                 "<ul>" + "".join(dup_body) + "</ul>"]
+                if dup_body else ["<p><em>None found.</em></p>"])
+
     # One list drives BOTH the summary table and the sections, so their
     # titles, order and counts always match; the table links to each section.
     sections_def = [
@@ -378,6 +451,9 @@ def main() -> int:
          "they can be deleted; if they are needed, a link to them should be "
          "added somewhere.</p>",
          unlinked_body),
+        ("Unused images", len(truly_unused) + len(tied_to_unlinked), None,
+         img_body),
+        ("Duplicate files", n_dup_groups, None, dup_body),
     ]
 
     w("| Kind of problem | How many |")
