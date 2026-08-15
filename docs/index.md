@@ -44,7 +44,7 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
     <div class="ssl-card-body"><b>Human physiology &amp; health</b><span>The human body, health and safety</span></div>
   </a>
   <a class="ssl-card" href="physics/UNPh35/">
-    <div class="ssl-card-img"><img src="assets/cards/geology-john.jpg" alt="" style="object-position: 50% 75%"></div>
+    <div class="ssl-card-img"><img src="assets/cards/geology-john.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Geology &amp; Earth science</b><span>Rocks, minerals and the story of the Earth</span></div>
   </a>
   <a class="ssl-card" href="physics/UNPh36/">
@@ -52,7 +52,7 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
     <div class="ssl-card-body"><b>Astronomy</b><span>The sky, the solar system and beyond</span></div>
   </a>
   <a class="ssl-card" href="physics/UNPh37/">
-    <div class="ssl-card-img"><img src="assets/cards/weather-john.jpg" alt="" style="object-position: 50% 80%"></div>
+    <div class="ssl-card-img"><img src="assets/cards/weather-john.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Weather</b><span>Clouds, wind, rain and the sky above</span></div>
   </a>
   <a class="ssl-card" href="topics/topicIndexAaAc/">
