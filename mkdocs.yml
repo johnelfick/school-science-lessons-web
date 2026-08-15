@@ -60,6 +60,7 @@ nav:
   - Home: index.md
   # --- BEGIN GENERATED NAV (written by build/emit.py --all) ---
   - Chemistry:
+    - chemistry/index.md
     - Basics:
       - "Heat substances": chemistry/UNChem1.md
       - "Carbon dioxide": chemistry/UNChem1a.md
@@ -140,6 +141,7 @@ nav:
       - "Chemistry Experiments, U, V, W": topics/topicIndexUVW.md
       - "Chemistry Experiments, X, Y, Z": topics/topicIndexXYZ.md
   - Physics:
+    - physics/index.md
     - "Measurement": physics/UNPh05.md
     - "Laboratory equipment": physics/UNPh06.md
     - "Safety Rules": physics/UNPh07.md
@@ -190,6 +192,7 @@ nav:
     - "Electronics": physics/UNPh38.md
     - "Physics Experiments": physics/UNPhysicsTable.md
   - Biology:
+    - biology/index.md
     - "Plant anatomy": biology/UNBiol1.md
     - "Communities": biology/UNBiol1a.md
     - "Optical illusions": biology/UNBiol1b.md
@@ -239,6 +242,7 @@ nav:
     - "Viruses": biology/UNBiology9.md
     - "Biology topics, common names, and genus names, A to Z": biology/UNBiologyTable.md
   - Primary science:
+    - primary/index.md
     - "Primary Science Lessons, Year 1": primary/year1.md
     - "Primary Science Lessons, Year 2": primary/year2.md
     - "Primary Science Lessons, Year 3": primary/year3.md
@@ -246,6 +250,7 @@ nav:
     - "Primary Science Lessons, Year 5": primary/year5.md
     - "Primary Science Lessons, Year 6": primary/year6.md
   - Agriculture:
+    - agriculture/index.md
     - Food gardens:
       - "Agriculture": foodgardens/Foodgardens1.md
       - "Crop care": foodgardens/Foodgardens2.md
@@ -283,6 +288,7 @@ nav:
       - "Taro Project": projects/ProjTaro.md
       - "Yam Project": projects/ProjYam.md
   - Appendices:
+    - appendices/index.md
     - "Appendix A, Amines and Alkaloids": appendices/appendixA.md
     - "Appendix B, Biology preparations": appendices/appendixB.md
     - "Appendix C, List of Chemicals": appendices/appendixC.md

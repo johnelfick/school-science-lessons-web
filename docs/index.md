@@ -19,23 +19,23 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
 </div>
 
 <div class="ssl-grid">
-  <a class="ssl-card" href="topics/topicIndexAaAc/">
+  <a class="ssl-card" href="chemistry/">
     <div class="ssl-card-img"><img src="assets/cards/chemistry-john.gif" alt="" style="object-position: 50% 70%"></div>
     <div class="ssl-card-body"><b>Chemistry</b><span>Elements, compounds, reactions and preparations</span></div>
   </a>
-  <a class="ssl-card" href="physics/UNPhysicsTable/">
+  <a class="ssl-card" href="physics/">
     <div class="ssl-card-img"><img src="assets/cards/physics-john.jpg" alt="" style="object-position: 50% 65%"></div>
     <div class="ssl-card-body"><b>Physics</b><span>Measurement, forces, electricity, light and sound</span></div>
   </a>
-  <a class="ssl-card" href="biology/UNBiologyTable/">
+  <a class="ssl-card" href="biology/">
     <div class="ssl-card-img"><img src="assets/cards/biology-john.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Biology</b><span>Plants, animals, cells and ecology</span></div>
   </a>
-  <a class="ssl-card" href="primary/year1/">
+  <a class="ssl-card" href="primary/">
     <div class="ssl-card-img"><img src="assets/cards/primary.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Primary science</b><span>Ready-to-teach lessons for Years 1–6</span></div>
   </a>
-  <a class="ssl-card" href="foodgardens/Foodgardens1/">
+  <a class="ssl-card" href="agriculture/">
     <div class="ssl-card-img"><img src="assets/cards/agriculture-john.jpg" alt="" style="object-position: 50% 60%"></div>
     <div class="ssl-card-body"><b>Agriculture</b><span>Food gardens, crops and school projects</span></div>
   </a>
@@ -54,6 +54,10 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
   <a class="ssl-card" href="physics/UNPh37/">
     <div class="ssl-card-img"><img src="assets/cards/weather-john.jpg" alt="" style="object-position: 50% 80%"></div>
     <div class="ssl-card-body"><b>Weather</b><span>Clouds, wind, rain and the sky above</span></div>
+  </a>
+  <a class="ssl-card" href="topics/topicIndexAaAc/">
+    <div class="ssl-card-img"><img src="assets/cards/chemistry.jpg" alt=""></div>
+    <div class="ssl-card-body"><b>Chemical index A–Z</b><span>Look up any substance, from Aa to Z</span></div>
   </a>
 </div>
 

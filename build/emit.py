@@ -725,7 +725,45 @@ def nav_label(title: str, rel: str) -> str:
     return label.replace('"', "'")
 
 
-def write_nav(mkdocs_yml: Path, titles: dict[str, str]) -> None:
+# Each generated tab gets a landing/overview page (navigation.indexes):
+# clicking the tab or a home card opens it. slug -> docs/<slug>/index.md.
+TAB_LANDINGS = {
+    "Chemistry": ("chemistry", "Experiments and reference for teaching "
+                  "chemistry — the basic chapters, the topic chapters, and "
+                  "the A–Z chemical index."),
+    "Physics": ("physics", "Measurement, mechanics, heat, sound, light and "
+                "electricity — plus geology, astronomy and weather."),
+    "Biology": ("biology", "Plants, animals, cells, human physiology, and "
+                "the A–Z of plant names."),
+    "Primary science": ("primary", "Ready-to-teach science lessons for "
+                        "Years 1 to 6."),
+    "Agriculture": ("agriculture", "Food gardens, soils, and school "
+                    "agriculture projects."),
+    "Appendices": ("appendices", "Reference appendices: chemical index, "
+                   "alkaloids, physical constants and more."),
+}
+
+
+def write_landing(docs: Path, tab: str, slug: str, blurb: str,
+                  groups: list) -> None:
+    out = ["---", f'title: "{tab}"', "---", "", f"# {tab}", "",
+           f'<p class="ssl-updates-note">{blurb}</p>', ""]
+    for sublabel, entries in groups:
+        if not entries:
+            continue
+        if sublabel:
+            out.append(f"## {sublabel}")
+            out.append("")
+        for label, md in entries:
+            out.append(f"- [{label}](../{md})")
+        out.append("")
+    dest = docs / slug / "index.md"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text("\n".join(out), encoding="utf-8")
+
+
+def write_nav(mkdocs_yml: Path, titles: dict[str, str],
+              docs: Path = Path("docs")) -> None:
     """Regenerate the nav block in mkdocs.yml from emitted page titles."""
     lines = []
 
@@ -734,6 +772,10 @@ def write_nav(mkdocs_yml: Path, titles: dict[str, str]) -> None:
 
     for tab, folders in NAV_TABS:
         add(1, f"- {tab}:")
+        landing = TAB_LANDINGS.get(tab)
+        if landing:
+            add(2, f"- {landing[0]}/index.md")
+        groups: list = []
         tab_index_pages: list[str] = []
         for folder, sublabel in folders:
             pages = sorted((r for r in titles if r.startswith(folder + "/")),
@@ -748,14 +790,24 @@ def write_nav(mkdocs_yml: Path, titles: dict[str, str]) -> None:
             main = [r for r in pages
                     if not posixpath.basename(r).startswith("topicIndex")]
             tab_index_pages += [r for r in pages if r not in main]
+            entries = []
             for rel in main:
                 md = posixpath.splitext(rel)[0] + ".md"
-                add(indent, f'- "{nav_label(titles[rel], rel)}": {md}')
+                label = nav_label(titles[rel], rel)
+                add(indent, f'- "{label}": {md}')
+                entries.append((label, md))
+            groups.append((sublabel, entries))
         if tab_index_pages:
             add(2, '- "Chemical index A–Z":')
+            entries = []
             for rel in tab_index_pages:
                 md = posixpath.splitext(rel)[0] + ".md"
-                add(3, f'- "{nav_label(titles[rel], rel)}": {md}')
+                label = nav_label(titles[rel], rel)
+                add(3, f'- "{label}": {md}')
+                entries.append((label, md))
+            groups.append(("Chemical index A–Z", entries))
+        if landing:
+            write_landing(docs, tab, landing[0], landing[1], groups)
 
     text = mkdocs_yml.read_text(encoding="utf-8")
     begin = text.index(NAV_BEGIN)
@@ -846,7 +898,7 @@ def main() -> int:
     print(f"Best-guess actions on {len(emitter.log)} pages "
           f"-> report/emit-log.txt")
     if args.all:
-        write_nav(Path("mkdocs.yml"), titles)
+        write_nav(Path("mkdocs.yml"), titles, docs)
         write_updates(docs / "index.md", pages, titles)
     return 0
 
