@@ -36,7 +36,7 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
     <div class="ssl-card-body"><b>Primary science</b><span>Ready-to-teach lessons for Years 1–6</span></div>
   </a>
   <a class="ssl-card" href="agriculture/">
-    <div class="ssl-card-img"><img src="assets/cards/agriculture-john.jpg" alt="" style="object-position: 50% 60%"></div>
+    <div class="ssl-card-img"><img src="assets/cards/agriculture-john.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Agriculture</b><span>Food gardens, crops and school projects</span></div>
   </a>
   <a class="ssl-card" href="biology/UNBiology2/">
