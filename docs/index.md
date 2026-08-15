@@ -134,6 +134,7 @@ day. The most recently revised pages:</p>
   <a href="https://johnelfick.goatcounter.com/" target="_blank" rel="noopener"
      title="Open the visitor statistics dashboard">
     <img src="https://johnelfick.goatcounter.com/counter/TOTAL.svg"
-         alt="Total visits" loading="lazy">
+         alt="Total visits" loading="lazy"
+         onerror="this.replaceWith('Visitor statistics')">
   </a>
 </p>
