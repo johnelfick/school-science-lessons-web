@@ -346,13 +346,18 @@ class Emitter:
             if visible and not skip:
                 # Highlight leading enumeration markers: "1.", "2a.", "1.2",
                 # "(a)" — John's numbered items, otherwise hard to scan.
-                visible = re.sub(
+                # Invisible anchor spans may precede the marker on the line.
+                pm = re.match(r'^(?:<span id="[^"]*"></span>\s*)+', visible)
+                prefix, rest = (visible[:pm.end()], visible[pm.end():]) \
+                    if pm else ("", visible)
+                rest = re.sub(
                     r"^((?:\(\w{1,2}\)|\d+(?:\.\d+)+\.?|\d+[a-z]?[.)]))(\s)",
-                    r'<b class="ssl-num">\1</b>\2', visible)
+                    r'<b class="ssl-num">\1</b>\2', rest)
                 # missing space after the marker: "4.Sunglasses"
-                visible = re.sub(
+                rest = re.sub(
                     r"^(\d+[a-z]?\.)(?=[A-Z])",
-                    r'<b class="ssl-num">\1</b> ', visible)
+                    r'<b class="ssl-num">\1</b> ', rest)
+                visible = prefix + rest
                 original_plain = html.unescape(
                     re.sub(r"<[^>]+>", "", text)).strip()
                 visible, chem_changed = chem_format(visible)
