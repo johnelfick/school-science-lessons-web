@@ -59,6 +59,26 @@ Dr&nbsp;John&nbsp;Elfick, School of Education, University of Queensland.</p>
     <div class="ssl-card-img"><img src="assets/cards/chemistry.jpg" alt=""></div>
     <div class="ssl-card-body"><b>Chemical index A–Z</b><span>Look up any substance, from Aa to Z</span></div>
   </a>
+  <a class="ssl-card" href="topics/topic03/">
+    <div class="ssl-card-img"><img src="assets/cards/safety.jpg" alt=""></div>
+    <div class="ssl-card-body"><b>Laboratory Safety</b><span>Safe practice for classroom and laboratory</span></div>
+  </a>
+  <a class="ssl-card" href="biology/UNBiologyTable/">
+    <div class="ssl-card-img"><img src="assets/cards/plants-john.jpg" alt="" style="object-position: 50% 20%"></div>
+    <div class="ssl-card-body"><b>Plant names A–Z</b><span>Scientific and common names of plants</span></div>
+  </a>
+  <a class="ssl-card" href="projects/ProjSchool/">
+    <div class="ssl-card-img"><img src="assets/cards/projects-john.jpg" alt=""></div>
+    <div class="ssl-card-body"><b>School projects</b><span>Growing and raising projects for schools</span></div>
+  </a>
+  <a class="ssl-card" href="biology/UNBiology4/">
+    <div class="ssl-card-img"><img src="assets/cards/microbio-john.jpg" alt="" style="object-position: 50% 35%"></div>
+    <div class="ssl-card-body"><b>Microbiology</b><span>Bacteria, fungi and life under the microscope</span></div>
+  </a>
+  <a class="ssl-card" href="physics/UNPh06/">
+    <div class="ssl-card-img"><img src="assets/cards/equipment-john.jpg" alt=""></div>
+    <div class="ssl-card-body"><b>Equipment</b><span>Laboratory equipment, care and use</span></div>
+  </a>
 </div>
 
 <h2 class="ssl-updates-title">Recently updated</h2>
