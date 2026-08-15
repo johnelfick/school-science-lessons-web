@@ -287,9 +287,11 @@ def main() -> int:
     w("<p>This page lists small problems found automatically in the source "
       "files of <a href='https://johnelfick.github.io/school-science-lessons/' "
       "target='_blank' rel='noopener'>School Science Lessons</a>. "
-      "The modern website repairs most of them on the fly, but fixing them in "
-      "the source files makes both websites better. Click a file name to see "
-      "its items.</p>")
+      "These issues are being worked on and are gradually being fixed — in "
+      "the meantime the website repairs most of them automatically. If you "
+      "find any other errors, please let us know at "
+      "<a href='mailto:j.elfick@uq.edu.au'>j.elfick@uq.edu.au</a>. "
+      "Click a file name to see its items.</p>")
     w("")
     # canonical-link check: every reachable page should declare its
     # graphical-edition equivalent (added 2026-08-13; a page saved from an
