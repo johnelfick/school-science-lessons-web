@@ -222,21 +222,45 @@ def main() -> int:
             other[i.source].append(f"{code} — {esc(p)}")
 
     # ---- HTML problems from the parser's repair log (page.warnings)
+    # Every message must tell John exactly what to search for and what to
+    # do — never show him raw pipeline log lines.
+    STRAY_A = ("The file contains a stray <code>&lt;a&gt;</code> tag with "
+               "nothing in it — it does nothing and confuses browsers. "
+               "Search for <code>&lt;a&gt;</code> and delete it.")
     html_problems: dict[str, list[str]] = defaultdict(list)
     for p in pages.values():
         for w in p.warnings:
             if w.startswith("closed unterminated link"):
                 href = w.split("(", 1)[-1].rstrip(")")
-                html_problems[p.path].append(
-                    f"A link is missing its closing tag. Search for "
-                    f"<code>{esc(href)}</code> and add <code>&lt;/a&gt;</code> "
-                    f"at the end of the link text.")
+                if "no attributes" in href:
+                    html_problems[p.path].append(STRAY_A)
+                else:
+                    html_problems[p.path].append(
+                        f"A link is missing its closing tag. Search for "
+                        f"<code>{esc(href)}</code> and add <code>&lt;/a&gt;</code> "
+                        f"at the end of the link text.")
+            elif w.startswith("unwrapped empty <a> tag"):
+                html_problems[p.path].append(STRAY_A)
             elif w.startswith("unwrapped unknown tag"):
                 tag = w.split("<", 1)[-1].rstrip(">")
                 html_problems[p.path].append(
                     f"The text contains <code>&lt;{esc(tag)}&gt;</code>, which is "
                     f"not a real HTML tag. It should probably be removed or "
                     f"spelled differently.")
+            elif w.startswith("repaired malformed anchor name"):
+                val = w.split("(", 1)[-1].rstrip(")").strip("'\"")
+                html_problems[p.path].append(
+                    f"A quotation mark is in the wrong place in a section-name "
+                    f"tag — search for <code>{esc(val[:40])}</code>. The name "
+                    f"must sit inside the quotes, like "
+                    f"<code>&lt;a name=\"...\"&gt;</code>.")
+            elif w.startswith("repaired malformed link address"):
+                val = w.split("(", 1)[-1].rstrip(")").strip("'\"")
+                html_problems[p.path].append(
+                    f"A quotation mark is in the wrong place in a link — "
+                    f"search for <code>{esc(val[:40])}</code>. The address "
+                    f"must sit inside the quotes, like "
+                    f"<code>&lt;a href=\"...\"&gt;</code>.")
             elif w.startswith("rebuilt table"):
                 html_problems[p.path].append(
                     "A table is written without <code>&lt;tr&gt;</code> and "
@@ -248,6 +272,11 @@ def main() -> int:
                     "The file contains <code>&lt;/body&gt;&lt;/html&gt;</code> in "
                     "the middle, with more content after it. Delete the early "
                     "closing tags — only the very end of the file should have them.")
+            elif w.startswith("not valid UTF-8"):
+                html_problems[p.path].append(
+                    "The file is saved in an old text encoding. Re-saving it "
+                    "as UTF-8 (the editor's default) fixes accented letters "
+                    "and symbols.")
             else:
                 html_problems[p.path].append(esc(w))
 
