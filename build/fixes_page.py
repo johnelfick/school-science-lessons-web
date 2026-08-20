@@ -291,6 +291,23 @@ def main() -> int:
     for k, v in other.items():
         html_problems[k].extend(v)
 
+    # merge repeated identical messages within a file into one line
+    from collections import Counter as _Counter
+    for f in list(html_problems):
+        merged = []
+        for msg, n in _Counter(html_problems[f]).items():
+            if n > 1 and msg == STRAY_A:
+                merged.append(
+                    f"The file contains {n} stray <code>&lt;a&gt;</code> tags "
+                    f"with nothing in them — they do nothing and confuse "
+                    f"browsers. Search for <code>&lt;a&gt;</code> and delete "
+                    f"each one.")
+            elif n > 1:
+                merged.append(f"{msg} <em>({n} times in this file)</em>")
+            else:
+                merged.append(msg)
+        html_problems[f] = merged
+
     dup_groups: dict[str, list[str]] = {}
     for f, d in dupes.items():
         rows = [f"<code>{esc(k)}</code> appears {v} times — each section name "
