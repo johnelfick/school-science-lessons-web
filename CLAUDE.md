@@ -40,8 +40,15 @@ fixes_page → mkdocs build → trim_search → check_links.
    page at the same relative path. Provenance footers, link healing, the
    corrections page and automatic regeneration all assume it. Never merge
    or split pages.
-2. **John's repo is read-only.** All repairs happen in our pipeline;
-   problems in his files are *reported* (corrections page) not edited.
+2. **John's repo is read-only — STRICTLY, never push to it.** John's
+   manual workflow cannot handle merges; any push we make creates
+   conflicts he cannot resolve. All repairs happen in our pipeline;
+   problems in his files are *reported* (corrections page, which shows
+   him the exact line to paste) not edited. The one-time repair pass of
+   2026-08-13 was done in person with Patrick syncing John's machine
+   afterwards — that condition does not normally hold. Lost canonical
+   tags etc. accumulate on the corrections page for John to fix
+   himself.
 3. **Anchors are sacred.** Section ids keep John's anchor names
    (`2.4.1H` style) so decades of inbound links keep working. Section
    *numbers* are display text — never renumber them.
