@@ -508,7 +508,7 @@ def main() -> int:
          "re-orders them automatically; moving the text in the source file "
          "puts both websites right.</p>",
          file_groups(displaced, "None found.")),
-        ("Suggested renumbering", sum(len(v) for v in renumber.values()),
+        ("Sections with wrong numbering", sum(len(v) for v in renumber.values()),
          "<p>These groups list sections whose numbers come from a different "
          "family (for example 9.9.1 listed under 9.9.9.0 Stems). The website "
          "shows them in the right place regardless, so there is no urgency — "
@@ -545,7 +545,7 @@ def main() -> int:
         "Pages missing their canonical link",
         "Typing mistakes in links",
         "HTML problems",
-        "Suggested renumbering",
+        "Sections with wrong numbering",
         "Sections in the wrong order",
         "Links to sections that moved",
         "Links to section names used in several files",
