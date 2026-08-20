@@ -308,14 +308,17 @@ def main() -> int:
                 merged.append(msg)
         html_problems[f] = merged
 
+    # duplicated section names fold into HTML problems (kept as a separate
+    # count for the console summary only)
     dup_groups: dict[str, list[str]] = {}
     for f, d in dupes.items():
-        rows = [f"<code>{esc(k)}</code> appears {v} times — each section name "
-                f"should be used only once in a file"
+        rows = [f"The section name <code>{esc(k)}</code> is used {v} times "
+                f"in this file — each name should be used only once."
                 for k, v in sorted(d.items(), key=lambda kv: -kv[1])[:10]]
         if len(d) > 10:
             rows.append(f"... and {len(d) - 10} more duplicated names")
         dup_groups[f] = rows
+        html_problems[f].extend(rows)
 
     n_typos = sum(len(v) for v in typos.values())
     n_moved = sum(len(v) for v in moved.values())
@@ -497,8 +500,6 @@ def main() -> int:
          "<p>Missing closing tags and mistyped tags. These can make text "
          "after them display incorrectly.</p>",
          file_groups(html_problems, "None found.")),
-        ("Duplicated section names", len(dup_groups), None,
-         file_groups(dup_groups, "None found.")),
         ("Sections in the wrong order",
          sum(len(v) for v in displaced.values()),
          "<p>These sections belong to a numbered group (according to the "
@@ -540,7 +541,6 @@ def main() -> int:
     _order = [
         "Typing mistakes in links",
         "HTML problems",
-        "Duplicated section names",
         "Pages missing their canonical link",
         "Files no longer linked from the website",
         "Unused images",
