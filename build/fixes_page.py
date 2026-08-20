@@ -460,7 +460,7 @@ def main() -> int:
          file_groups(html_problems, "None found.")),
         ("Duplicated section names", len(dup_groups), None,
          file_groups(dup_groups, "None found.")),
-        ("Sections sitting away from their group",
+        ("Sections in the wrong order",
          sum(len(v) for v in displaced.values()),
          "<p>These sections belong to a numbered group (according to the "
          "contents list of that group), but their text is located somewhere "
@@ -507,7 +507,7 @@ def main() -> int:
         "Unused images",
         "Duplicate files",
         "Suggested renumbering",
-        "Sections sitting away from their group",
+        "Sections in the wrong order",
         "Links to sections that moved",
         "Links to section names used in several files",
         "Links to sections that no longer exist",
