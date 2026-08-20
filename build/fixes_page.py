@@ -374,14 +374,11 @@ def main() -> int:
     unlinked_groups: dict[str, list[str]] = {}
     for f in unreachable:
         if f.startswith("google") and f.endswith(".html"):
-            unlinked_groups[f] = [
-                "This is the Google site-verification file — keep it, even "
-                "though no page links to it."]
-        else:
-            unlinked_groups[f] = [
-                "No page links to this file, so visitors cannot reach it. "
-                "If it is not needed it can be deleted; if it is needed, "
-                "add a link to it somewhere."]
+            continue   # Google site-verification file: unlinked by design
+        unlinked_groups[f] = [
+            "No page links to this file, so visitors cannot reach it. "
+            "If it is not needed it can be deleted; if it is needed, "
+            "add a link to it somewhere."]
     unlinked_body = file_groups(unlinked_groups, "None found.")
 
     # ---- unused images: on disk but not referenced by any linked page
@@ -508,7 +505,7 @@ def main() -> int:
          "version. A page saved from an older copy can lose it; this list "
          "shows the exact line to put back.</p>",
          file_groups(canonical_missing, "None — every page has its line.")),
-        ("Files no longer linked from the website", len(unreachable),
+        ("Files no longer linked from the website", len(unlinked_groups),
          "<p>No page links to these files any more, so visitors cannot "
          "reach them. They are probably old copies. If they are not needed, "
          "they can be deleted; if they are needed, a link to them should be "
