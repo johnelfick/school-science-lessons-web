@@ -539,12 +539,12 @@ def main() -> int:
     # sections, renumbering) at the bottom in this fixed order — NOT sorted
     # by count, which would shuffle as numbers change.
     _order = [
-        "Typing mistakes in links",
-        "HTML problems",
-        "Pages missing their canonical link",
         "Files no longer linked from the website",
         "Unused images",
         "Duplicate files",
+        "Pages missing their canonical link",
+        "Typing mistakes in links",
+        "HTML problems",
         "Suggested renumbering",
         "Sections in the wrong order",
         "Links to sections that moved",
