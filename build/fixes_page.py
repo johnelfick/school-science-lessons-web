@@ -519,7 +519,7 @@ def main() -> int:
         ("Pages missing their canonical link",
          sum(len(v) for v in canonical_missing.values()),
          "<p>Every page carries one line in its <code>&lt;head&gt;</code> "
-         "telling search engines that the graphical website is the official "
+         "telling search engines that this website is the official "
          "version. A page saved from an older copy can lose it; this list "
          "shows the exact line to put back.</p>",
          file_groups(canonical_missing, "None — every page has its line.")),
