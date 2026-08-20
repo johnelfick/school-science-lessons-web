@@ -458,6 +458,27 @@ def main() -> int:
         ("Duplicate files", n_dup_groups, None, dup_body),
     ]
 
+    # Ordering (per Patrick, 2026-08-20): the short, actionable sections
+    # first; the very long lists (moved/gone/ambiguous links, displaced
+    # sections, renumbering) at the bottom in this fixed order — NOT sorted
+    # by count, which would shuffle as numbers change.
+    _order = [
+        "Typing mistakes in links",
+        "HTML problems",
+        "Duplicated section names",
+        "Other link problems",
+        "Pages missing their canonical link",
+        "Files no longer linked from the website",
+        "Unused images",
+        "Duplicate files",
+        "Suggested renumbering",
+        "Sections sitting away from their group",
+        "Links to sections that moved",
+        "Links to section names used in several files",
+        "Links to sections that no longer exist",
+    ]
+    sections_def.sort(key=lambda s: _order.index(s[0]))
+
     w("| Kind of problem | How many |")
     w("|---|---|")
     for i, (title, count, _intro, _body) in enumerate(sections_def, 1):
