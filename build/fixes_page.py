@@ -354,11 +354,18 @@ def main() -> int:
                 f"The canonical line points to <code>{esc(m.group(1))}</code> "
                 f"but should be <code>{line}</code>")
 
-    if unreachable:
-        unlinked_body = ["<ul>" + "".join(
-            f"<li><code>{esc(f)}</code></li>" for f in unreachable) + "</ul>"]
-    else:
-        unlinked_body = ["<p><em>None found.</em></p>"]
+    unlinked_groups: dict[str, list[str]] = {}
+    for f in unreachable:
+        if f.startswith("google") and f.endswith(".html"):
+            unlinked_groups[f] = [
+                "This is the Google site-verification file — keep it, even "
+                "though no page links to it."]
+        else:
+            unlinked_groups[f] = [
+                "No page links to this file, so visitors cannot reach it. "
+                "If it is not needed it can be deleted; if it is needed, "
+                "add a link to it somewhere."]
+    unlinked_body = file_groups(unlinked_groups, "None found.")
 
     # ---- unused images: on disk but not referenced by any linked page
     import hashlib
@@ -411,27 +418,28 @@ def main() -> int:
             by_hash.setdefault(norm_hash(f), []).append(f)
         except OSError:
             continue
-    dup_body = []
+    dup_groups_files: dict[str, list[str]] = {}
     reachable_set = set(pages)
     for group in by_hash.values():
         if len(group) < 2:
             continue
-        marks = []
-        for f in group:
-            if f in reachable_set or f in referenced_imgs:
-                marks.append(f"<code>{esc(f)}</code> (in use)")
-            else:
-                marks.append(f"<code>{esc(f)}</code> (not linked — "
-                             f"candidate for deletion)")
-        dup_body.append("<li>" + " and ".join(marks)
-                        + " have identical content.</li>")
-    n_dup_groups = len(dup_body)
+
+        def mark(f):
+            return "in use" if (f in reachable_set or f in referenced_imgs) \
+                else "not linked — candidate for deletion"
+        primary = sorted(group, key=lambda f: mark(f) != "in use")[0]
+        items = [f"Identical content to <code>{esc(other)}</code> "
+                 f"({mark(other)}). This copy is {mark(primary)}."
+                 for other in group if other != primary]
+        dup_groups_files[primary] = items
+    n_dup_groups = len(dup_groups_files)
     dup_body = (["<p>The same content stored under more than one name or "
                  "folder. Usually the linked copy should stay and the "
                  "unlinked one can go; if both are in use, the links should "
-                 "be pointed at one of them first.</p>",
-                 "<ul>" + "".join(dup_body) + "</ul>"]
-                if dup_body else ["<p><em>None found.</em></p>"])
+                 "be pointed at one of them first.</p>"]
+                + file_groups(dup_groups_files, "None found."))
+    if not dup_groups_files:
+        dup_body = ["<p><em>None found.</em></p>"]
 
     # One list drives BOTH the summary table and the sections, so their
     # titles, order and counts always match; the table links to each section.
