@@ -218,8 +218,14 @@ def main() -> int:
             ambiguous[i.source].append(
                 f"{code} — a section with this name exists in several files "
                 f"({esc(', '.join(owners))}). The link should point at one of them.")
+        elif "empty href" in p:
+            other[i.source].append(
+                "A link with no address — <code>href=\"\"</code>. Give the "
+                "link an address, or remove the link tags around the text.")
         else:
-            other[i.source].append(f"{code} — {esc(p)}")
+            other[i.source].append(
+                f"{code} points to a file that does not exist. Correct the "
+                f"address or remove the link.")
 
     # ---- HTML problems from the parser's repair log (page.warnings)
     # Every message must tell John exactly what to search for and what to
@@ -279,6 +285,11 @@ def main() -> int:
                     "and symbols.")
             else:
                 html_problems[p.path].append(esc(w))
+
+    # fold the few remaining link oddities into HTML problems (one section
+    # fewer for the editor)
+    for k, v in other.items():
+        html_problems[k].extend(v)
 
     dup_groups: dict[str, list[str]] = {}
     for f, d in dupes.items():
@@ -465,10 +476,6 @@ def main() -> int:
          "need judgment: some entries may be deliberate cross-references, "
          "and sometimes it is the group's own number that is wrong.</p>",
          file_groups(renumber, "None found.")),
-        ("Other link problems", n_other,
-         "<p>Links with an empty address, or pointing at a file that does "
-         "not exist.</p>",
-         file_groups(other, "None found.")),
         ("Pages missing their canonical link",
          sum(len(v) for v in canonical_missing.values()),
          "<p>Every page carries one line in its <code>&lt;head&gt;</code> "
@@ -495,7 +502,6 @@ def main() -> int:
         "Typing mistakes in links",
         "HTML problems",
         "Duplicated section names",
-        "Other link problems",
         "Pages missing their canonical link",
         "Files no longer linked from the website",
         "Unused images",
