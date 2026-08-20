@@ -432,18 +432,35 @@ def main() -> int:
             by_hash.setdefault(norm_hash(f), []).append(f)
         except OSError:
             continue
+    # which pages link to each file (so the editor knows where to look)
+    users: dict[str, set] = defaultdict(set)
+    for src, href, _t in all_links:
+        if T.is_external(href) or href.startswith("#"):
+            continue
+        tgt, _f = T.resolve_href(src, href)
+        if tgt:
+            users[tgt].add(src)
+
     dup_groups_files: dict[str, list[str]] = {}
     reachable_set = set(pages)
     for group in by_hash.values():
         if len(group) < 2:
             continue
 
-        def mark(f):
-            return "in use" if (f in reachable_set or f in referenced_imgs) \
-                else "not linked — candidate for deletion"
-        primary = sorted(group, key=lambda f: mark(f) != "in use")[0]
+        def used(f):
+            return f in reachable_set or f in referenced_imgs
+
+        def where(f):
+            u = sorted(users.get(f, []))
+            if not u:
+                return "not linked — candidate for deletion"
+            shown = ", ".join(f"<code>{esc(x)}</code>" for x in u[:3])
+            more = f" and {len(u) - 3} more pages" if len(u) > 3 else ""
+            return f"used by {shown}{more}"
+        primary = sorted(group, key=lambda f: not used(f))[0]
         items = [f"Identical content to <code>{esc(other)}</code> "
-                 f"({mark(other)}). This copy is {mark(primary)}."
+                 f"({where(other)}). This copy: {where(primary)}. Point all "
+                 f"links at one copy, then delete the other."
                  for other in group if other != primary]
         dup_groups_files[primary] = items
     n_dup_groups = len(dup_groups_files)
