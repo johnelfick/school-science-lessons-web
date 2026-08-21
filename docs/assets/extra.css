@@ -143,23 +143,27 @@
 
 .md-typeset button.ssl-copy {
   font-size: 0.62rem;
-  padding: 0.1rem 0.55rem;
+  font-weight: 700;
+  padding: 0.18rem 0.7rem;
   margin-left: 0.4rem;
-  border: 1px solid var(--md-primary-fg-color);
+  border: none;
   border-radius: 6px;
-  background: transparent;
-  color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color);
+  color: #ffffff;
   cursor: pointer;
   vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 .md-typeset button.ssl-copy:hover {
-  background: var(--md-primary-fg-color);
-  color: var(--md-primary-bg-color);
+  background: var(--md-primary-fg-color--dark, #0c4638);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+.md-typeset button.ssl-copy:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .md-typeset button.ssl-copy.ssl-copy--done {
-  border-color: var(--md-accent-fg-color);
-  color: var(--md-accent-fg-color);
-  background: transparent;
+  background: var(--md-accent-fg-color);
 }
 
 /* Page-top shortcut index, collapsed by default ------------------------ */
