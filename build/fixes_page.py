@@ -31,6 +31,12 @@ def esc(s: str) -> str:
     return html.escape(str(s), quote=False)
 
 
+def copy_btn(text: str) -> str:
+    """A small button that copies `text` to the clipboard (see extra.js)."""
+    return ('<button class="ssl-copy" type="button" data-copy="'
+            + html.escape(text, quote=True) + '">Copy</button>')
+
+
 def rel_href(from_file: str, to_file: str, frag: str | None) -> str:
     """Reconstruct the href in the editor's own convention: files in a
     subfolder always link as ../folder/file.html, root files as ./..."""
@@ -198,15 +204,17 @@ def main() -> int:
             fix = rel_href(i.source, target, c) if target else f"#{c}"
             typos[i.source].append(
                 f"{code} has a small typing mistake — change it to "
-                f"<code>{esc(fix)}</code>")
+                f"<code>{esc(fix)}</code> {copy_btn(fix)}")
         elif "moved to another page" in p:
             c = clean_frag(frag or "")
             owners = anchor_owners.get(c) or anchor_owners.get(frag or "")
             owner = next(iter(owners)) if owners else None
             if owner:
+                newhref = rel_href(i.source, owner, c)
                 moved[i.source].append(
                     f"{code} — this section now lives in <b>{esc(owner)}</b>. "
-                    f"Change the link to <code>{esc(rel_href(i.source, owner, c))}</code>")
+                    f"Change the link to <code>{esc(newhref)}</code> "
+                    f"{copy_btn(newhref)}")
         elif "gone from corpus" in p:
             gone[i.source].append(
                 f"{code} — the section <code>#{esc(frag or '')}</code> no longer "
