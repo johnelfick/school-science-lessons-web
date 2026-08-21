@@ -527,7 +527,7 @@ def main() -> int:
          "need judgment: some entries may be deliberate cross-references, "
          "and sometimes it is the group's own number that is wrong.</p>",
          file_groups(renumber, "None found.")),
-        ("Pages missing their canonical link",
+        ("Missing canonical links",
          sum(len(v) for v in canonical_missing.values()),
          "<p>Every page carries one line in its <code>&lt;head&gt;</code> "
          "telling search engines that this website is the official "
@@ -553,7 +553,7 @@ def main() -> int:
         "Files no longer linked from the website",
         "Unused images",
         "Duplicate files",
-        "Pages missing their canonical link",
+        "Missing canonical links",
         "Typing mistakes in links",
         "HTML problems",
         "Sections with wrong numbering",
