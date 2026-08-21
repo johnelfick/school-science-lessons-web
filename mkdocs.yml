@@ -299,6 +299,7 @@ nav:
     - "Alkaloids, Ibogaine to Zizyphine": appendices/appendixH.md
   # --- END GENERATED NAV ---
   - About:
+      - About School Science Lessons: about.md
       - Dr John Elfick: about-john.md
       - Safety notice: safety.md
       - Websites: websites.md
