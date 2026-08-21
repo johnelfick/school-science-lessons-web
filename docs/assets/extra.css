@@ -139,6 +139,29 @@
   font-weight: 700;
 }
 
+/* Copy buttons on the corrections page --------------------------------- */
+
+.md-typeset button.ssl-copy {
+  font-size: 0.62rem;
+  padding: 0.1rem 0.55rem;
+  margin-left: 0.4rem;
+  border: 1px solid var(--md-primary-fg-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--md-primary-fg-color);
+  cursor: pointer;
+  vertical-align: middle;
+}
+.md-typeset button.ssl-copy:hover {
+  background: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+}
+.md-typeset button.ssl-copy.ssl-copy--done {
+  border-color: var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color);
+  background: transparent;
+}
+
 /* Page-top shortcut index, collapsed by default ------------------------ */
 
 .md-typeset details.ssl-quicklinks {

@@ -365,14 +365,17 @@ def main() -> int:
             else NEW_BASE + posixpath.splitext(rel)[0] + "/"
         m = _re2.search(r'<link rel="canonical" href="([^"]+)"', raw)
         line = f'&lt;link rel="canonical" href="{expected}"&gt;'
+        line_raw = f'<link rel="canonical" href="{expected}">'
+        btn = ('<button class="ssl-copy" type="button" data-copy="'
+               + html.escape(line_raw, quote=True) + '">Copy line</button>')
         if m is None:
             canonical_missing.setdefault(rel, []).append(
                 f"The canonical line is missing. Add this inside "
-                f"<code>&lt;head&gt;</code>: <code>{line}</code>")
+                f"<code>&lt;head&gt;</code>: <code>{line}</code> {btn}")
         elif m.group(1) != expected:
             canonical_missing.setdefault(rel, []).append(
                 f"The canonical line points to <code>{esc(m.group(1))}</code> "
-                f"but should be <code>{line}</code>")
+                f"but should be <code>{line}</code> {btn}")
 
     unlinked_groups: dict[str, list[str]] = {}
     for f in unreachable:
