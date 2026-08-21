@@ -49,6 +49,15 @@ fixes_page → mkdocs build → trim_search → check_links.
    afterwards — that condition does not normally hold. Lost canonical
    tags etc. accumulate on the corrections page for John to fix
    himself.
+   INCIDENT 2026-08-20: even a content-neutral push+revert pair broke
+   John's push (non-fast-forward rejection; he re-copied files, saw "no
+   unstaged changes" because they were already committed locally, and
+   concluded GitHub was broken). Remedy: rewind origin/main to his last
+   commit with `git push --force-with-lease=main:<our-tip> origin
+   <his-commit>:main` (safe only because our commits netted to zero
+   content), then he just clicks Push. Symptom to recognize: "You must
+   stage at least one file" + push error in Git GUI right after any
+   remote-side commit.
 3. **Anchors are sacred.** Section ids keep John's anchor names
    (`2.4.1H` style) so decades of inbound links keep working. Section
    *numbers* are display text — never renumber them.
